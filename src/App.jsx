@@ -3,13 +3,14 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Landing from "./pages/Landing";
+import PromotorLandingPage from "./pages/PromotorLandingPage";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <Landing />
+      <PromotorLandingPage />
     </>
   );
 }
