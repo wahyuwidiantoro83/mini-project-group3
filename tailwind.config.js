@@ -6,6 +6,9 @@ export default {
     fontFamily: {
       sans: ["Roboto", "sans-serif"],
     },
+    // height : {
+    //   '550':'34rem'
+    // }
   },
   plugins: [],
 };
