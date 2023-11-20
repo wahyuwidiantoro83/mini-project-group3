@@ -3,52 +3,97 @@ import Navbar from "../../components/Navbar";
 import useDisclosure from "../../hooks/useDisclosure";
 import smallPoster from "../../assets/small.webp";
 import largePoster from "../../assets/large.webp";
-import music from "../../assets/icon_category/live-music.png";
-import nightlife from "../../assets/icon_category/disco-ball.png";
-import art from "../../assets/icon_category/abstract.png";
-import holidays from "../../assets/icon_category/sunbed.png";
-import health from "../../assets/icon_category/stethoscope.png";
-import hobbies from "../../assets/icon_category/joystick.png";
-import bussiness from "../../assets/icon_category/profit.png";
-import food from "../../assets/icon_category/fast-food.png";
-import { HiChevronDown } from "react-icons/hi2";
+import { HiChevronDown, HiMapPin } from "react-icons/hi2";
 import { data } from "./data";
-import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../../components/EventCard";
+import axios from "axios";
+import Layout from "../../components/Layout";
+import API_CALL from "../../helper/api_backend";
 
 const Landing = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [category, setCategory] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [cities, setCities] = useState([]);
 
-  const [currLocation, setCurrLocation] = useState("Surabaya");
+  const [currLocation, setCurrLocation] = useState("Jakarta");
+  const [currType, setCurrType] = useState("all");
+  const [searchLocation, setSearchLocation] = useState("");
 
-  const category = [
-    { name: "Music", icon: music },
-    { name: "Nightlife", icon: nightlife },
-    { name: "Performing & Visual Art", icon: art },
-    { name: "Holidays", icon: holidays },
-    { name: "Health", icon: health },
-    { name: "Hobbies", icon: hobbies },
-    { name: "Bussiness", icon: bussiness },
-    { name: "Food & Drink", icon: food },
-  ];
+  const getLocation = async (latitude, longitude) => {
+    const location = await axios.get("https://geocodeapi.p.rapidapi.com/GetLargestCities", {
+      params: {
+        latitude: `${latitude}`,
+        longitude: `${longitude}`,
+        range: "50000",
+      },
+      headers: {
+        "X-RapidAPI-Key": "622ba92fc2mshc83a580aba8857ap1c1369jsn5afb1fbf4a98",
+        "X-RapidAPI-Host": "geocodeapi.p.rapidapi.com",
+      },
+    });
+    setCurrLocation(location.data[0].City);
+    sessionStorage.setItem("currLocation", location.data[0].City);
+  };
+
+  const getCategory = async () => {
+    const dataCategory = await API_CALL.get("/category");
+    setCategory(dataCategory.data);
+  };
+
+  const getEvent = async () => {
+    const dataEvent = await API_CALL.get("/event", {
+      params: {
+        city: currLocation,
+        landingType: currType,
+      },
+    });
+    setEvents(dataEvent.data);
+  };
+
+  const getSearchLocation = async () => {
+    const dataLocation = await API_CALL.get("/city", {
+      params: {
+        city: searchLocation,
+      },
+    });
+    setCities(dataLocation.data);
+  };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("currLocation")) {
+      setCurrLocation(sessionStorage.getItem("currLocation"));
+    } else {
+      navigator.geolocation.getCurrentPosition((position) => {
+        getLocation(position.coords.latitude, position.coords.longitude);
+      });
+    }
+    getCategory();
+    if (sessionStorage.getItem("filterLanding")) {
+      setCurrType(sessionStorage.getItem("filterLanding"));
+    }
+  }, []);
+
+  useEffect(() => {
+    getEvent();
+  }, [currLocation, currType]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      getSearchLocation();
+    }, 1000);
+  }, [searchLocation]);
 
   const filter = [
-    { filter: "All" },
-    { filter: "For you" },
-    { filter: "Online" },
-    { filter: "Today" },
-    { filter: "This weekend" },
-    { filter: "Haloween" },
-    { filter: "Breast Cancer Awareness Month" },
-    { filter: "Veteran's Day" },
-    { filter: "Free" },
-    { filter: "Music" },
-    { filter: "Food & Drink" },
-    { filter: "Charity & Causes" },
+    { filter: "All", value: "all" },
+    { filter: "Online", value: "online" },
+    { filter: "Today", value: "today" },
+    { filter: "This weekend", value: "week" },
+    { filter: "This Month", value: "month" },
+    { filter: "Free", value: "free" },
   ];
 
-  const event = [...data];
   const navigate = useNavigate();
 
   const printcategory = () => {
@@ -59,9 +104,13 @@ const Landing = () => {
           className="group/category flex flex-col  items-center text-xs font-medium gap-2 cursor-pointer "
         >
           <div className="flex w-14 md:w-28 aspect-square rounded-full p-4 md:p-9 bg-white group-hover/category:bg-gray-300 justify-center items-center">
-            <img src={value.icon} className="w-full object-center" alt="" />
+            <img
+              src={`http://localhost:2066/public/category/${value.image}`}
+              className="w-full object-center"
+              alt=""
+            />
           </div>
-          <span className="text-gray-500 group-hover/category:text-gray-800">{value.name}</span>
+          <span className="text-gray-500 group-hover/category:text-gray-800">{value.category}</span>
         </div>
       );
     });
@@ -73,8 +122,12 @@ const Landing = () => {
         <div
           key={idx}
           className={`text-sm text-gray-500 font-medium ${
-            value.filter === "All" ? "border-b-2 border-gray-800 text-gray-800" : ""
+            value.value === currType ? "border-b-2 border-gray-800 text-gray-800" : ""
           } hover:border-b-2 hover:text-gray-800 hover:border-gray-800 pb-4 min-w-max cursor-pointer`}
+          onClick={() => {
+            setCurrType(value.value);
+            sessionStorage.setItem("filterLanding", value.value);
+          }}
         >
           {value.filter}
         </div>
@@ -83,7 +136,7 @@ const Landing = () => {
   };
 
   const printEvent = () => {
-    return event.map((value, idx) => {
+    return events.map((value, idx) => {
       return (
         <div key={idx}>
           <EventCard data={value} />
@@ -92,9 +145,29 @@ const Landing = () => {
     });
   };
 
+  const printLocation = () => {
+    return cities.map((value, idx) => {
+      return (
+        <div
+          key={value.id}
+          className="flex w-full h-16 items-center p-5 gap-4 hover:bg-slate-100 cursor-pointer"
+          onClick={() => {
+            onClose();
+            setCurrLocation(value.city);
+            sessionStorage.setItem("currLocation", value.city);
+          }}
+        >
+          <span>
+            <HiMapPin />
+          </span>
+          <span className="text-base font-medium">{value.city}</span>
+        </div>
+      );
+    });
+  };
+
   return (
-    <>
-      <Navbar />
+    <Layout currLocation={currLocation}>
       <div className="main-content">
         <div className="main-poster w-full h-fit relative">
           <img className="hidden md:block w-full" src={largePoster} alt="" />
@@ -109,16 +182,44 @@ const Landing = () => {
         <div className="section-filter min-h-screen px-8 py-6 md:px-24 lg:px-36">
           <div className=" flex text-3xl flex-col md:flex-row md:text-3xl font-extrabold md:items-center gap-2 md:gap-3 py-4 md:py-6">
             <span>Popular in</span>
-            <div className="flex text-gray-500 items-center gap-2">
+            <div className="flex relative text-gray-500 items-center gap-2">
               <span className="">
                 <HiChevronDown />
               </span>
               <input
-                className="focus:outline-none border-b-2 border-gray-500 w-40 focus:w-auto"
+                className={`focus:outline-none border-b-2 border-gray-500 w-[200px]`}
                 type="text"
                 placeholder="Choose Location"
                 defaultValue={currLocation}
+                key={currLocation}
+                onClick={onOpen}
+                onChange={(e) => {
+                  setSearchLocation(e.target.value);
+                }}
               />
+              <div
+                className={`${
+                  isOpen ? "absolute" : "hidden"
+                } top-14 left-0 right-0 w-64 md:w-96 border rounded-lg shadow-md bg-white`}
+              >
+                <div className="flex flex-col w-full">
+                  <div
+                    className="flex w-full h-16 items-center p-5 gap-4 hover:bg-slate-100 cursor-pointer"
+                    onClick={() => {
+                      onClose();
+                      navigator.geolocation.getCurrentPosition((position) => {
+                        getLocation(position.coords.latitude, position.coords.longitude);
+                      });
+                    }}
+                  >
+                    <span>
+                      <HiMapPin />
+                    </span>
+                    <span className="text-base font-medium">Use Current Location</span>
+                  </div>
+                  {printLocation()}
+                </div>
+              </div>
             </div>
           </div>
           <div className="filter-list flex flex-row overflow-x-auto gap-6 py-4 md:py-6">
@@ -138,8 +239,7 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

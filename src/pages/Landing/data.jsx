@@ -29,7 +29,7 @@ export const data = [
   },
   {
     id: 3,
-    title: "Innovation Challenge Powered by Launch Pad - AI for Impact",
+    title: "Innovation Challenge Powered",
     date: "Thursday, November 9",
     startHour: "8:00 AM",
     endHour: "2:30 PM",
