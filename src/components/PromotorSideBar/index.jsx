@@ -49,7 +49,7 @@ const printSidebarMenu = () => {
 // }
     return (
         <div>
-        <div className="  fixed h-full hidden bg-black text-white md:flex w-16">
+        <div className="fixed -z-20 h-full hidden bg-black text-white md:flex w-16">
             <ul className='flex w-full flex-col'>
                 {printSidebarMenu()}
             </ul>

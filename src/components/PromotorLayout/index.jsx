@@ -1,3 +1,4 @@
+import Footer from "../Footer"
 import PromotorHeader from "../PromotorHeader"
 import PromotorSideBar from "../PromotorSideBar"
 

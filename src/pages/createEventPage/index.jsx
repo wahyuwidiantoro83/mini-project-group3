@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { AiOutlineDown } from "react-icons/ai";
-import { BsCalendar } from "react-icons/bs";
+import { BsGlobe2 } from "react-icons/bs";
 import LayoutPromotor from "../../components/PromotorLayout";
 import React from "react";
-import SelectOption from "../../components/selectOption";
-import { HiOutlineBars3, HiMagnifyingGlass } from "react-icons/hi2";
+import { CiGlobe } from "react-icons/ci";
+import { IoLocationOutline } from "react-icons/io5";
+import Footer from "../../components/Footer";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -16,8 +17,9 @@ const CreateEvent = () => {
   const [eventCategory, setEventCategory] = React.useState("Category");
   return (
     <LayoutPromotor>
-      <div className="border-b-[1px] pb-8 border-slate-300">
-        <div className="pl-5 pr-10 md:w-[450px] md:mx-auto lg:w-[600px]">
+      <div className=" bg-transparent" >
+      <div className="">
+        <div className="pl-5 pr-10 md:w-[450px] md:mx-auto lg:w-[600px] pb-7">
           <div
             onClick={() => navigate("/manage/event")}
             className="text-blue-500 font-bold mt-3 w-fit cursor-pointer"
@@ -136,16 +138,28 @@ const CreateEvent = () => {
                 Address
               </legend>
               <p className="text-[0.8rem] mt-3">
-                Help people in the area discover your event and let attendees know where to show up. If this is an online event, put your link address
+                Help people in the area discover your event and let attendees
+                know where to show up. If this is an online event, put your link
+                address
               </p>
               <div className="flex pl-2 mt-3 items-center text-sm bg-slate-200 gap-2 shadow-md rounded-sm focus:border-2 focus:border-blue-600">
                 <span>
-                  <HiMagnifyingGlass />
+                  <IoLocationOutline />
                 </span>
                 <input
                   type="url"
                   className="w-full py-3 bg-slate-200 focus:outline-none"
                   placeholder="Select event address or link address "
+                />
+              </div>
+              <div className="flex pl-2 mt-3 items-center text-sm bg-slate-200 gap-2 shadow-md rounded-sm focus:border-2 focus:border-blue-600">
+                <span>
+                  <CiGlobe />
+                </span>
+                <input
+                  type="url"
+                  className="w-full py-3 bg-slate-200 focus:outline-none"
+                  placeholder="Select country your event took place"
                 />
               </div>
             </div>
@@ -207,22 +221,25 @@ const CreateEvent = () => {
           </form>
         </div>
       </div>
-        {/* BUTTON DISCARD & SAVE */}
-        <div className="flex gap-3 mt-6 justify-end pr-4 pb-6">
+      <div className="border-t-[1px] -z-30 border-slate-300"></div>
+      {/* BUTTON DISCARD & SAVE */}
+      <div className="flex gap-3 mt-6 justify-end pr-4 pb-6 ">
         <button
-            type="button"
-            className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
-          >
-            Discard
-          </button>
+          type="button"
+          className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
+        >
+          Discard
+        </button>
         <button
-            type="button"
-            className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
-            onClick={()=>navigate("/create/event/details")}
-          >
-            Save & Continue
-          </button>
-        </div>
+          type="button"
+          className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
+          onClick={() => navigate("/create/event/details")}
+        >
+          Save & Continue
+        </button>
+      </div>
+      <Footer />
+    </div>
     </LayoutPromotor>
   );
 };

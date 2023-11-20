@@ -3,6 +3,7 @@ import LayoutPromotor from "../../components/PromotorLayout";
 import { HiMagnifyingGlass, HiOutlineTrash } from "react-icons/hi2";
 import { FiEdit2, FiEye } from "react-icons/fi";
 import {  useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 const ManageEvent = () => {
   const navigate = useNavigate()
@@ -88,6 +89,7 @@ const ManageEvent = () => {
           <tbody>{printMyEvent()}</tbody>
         </table>
       </div>
+      <Footer/>
     </LayoutPromotor>
   );
 };
