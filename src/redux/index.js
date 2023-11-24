@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
+import accountReducer from "./slice/accountSlice"
 
 const globalState = configureStore({
   reducer: {
-    reducer1,
-    reducer2,
+    account: accountReducer,
   },
 });
 
