@@ -9,10 +9,10 @@ import DetailEvent from "./pages/DetailEvent";
 import FindEvent from "./pages/FindEvent";
 import PublishPage from "./pages/PublishEvent";
 import ManageTicket from "./pages/manageTicketPage";
-
 function App() {
   return (
     <>
+
       <Routes>
         
         <Route path="/" element={<PromotorLandingPage />} />
@@ -25,8 +25,7 @@ function App() {
         <Route path="/create/event" element={<CreateEvent />} />
         <Route path="/create/event/details" element={<CreateEventDetails />} />
         <Route path="/publish" element={<PublishPage />} />
-        
-        
+              
         
         <Route path="/explore" />
         {/* <Route path="/event/detail/:id" /> */}

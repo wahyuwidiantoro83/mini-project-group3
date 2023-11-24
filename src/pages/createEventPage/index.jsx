@@ -6,6 +6,7 @@ import React from "react";
 import { CiGlobe } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
 import Footer from "../../components/Footer";
+import ScrollToTop from "../../hooks/scrollToTop";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -15,9 +16,17 @@ const CreateEvent = () => {
   const [eventType, setEventType] = React.useState("Type");
   const [showType2, setShowType2] = React.useState(false);
   const [eventCategory, setEventCategory] = React.useState("Category");
+  const [eventCategoryId, setEventCategoryId] = React.useState(0);
+  const [eventAddress,setEventAddress]=React.useState("");
+  const [eventCity,setEventCity]=React.useState("");
+  const [eventDateStart,setEventDateStart]=React.useState("");
+  const [eventDateEnds,setEventDateEnds]=React.useState("");
+  const [eventStartHour,setEventStartHour]=React.useState("");
+  const [eventEndHour,setEventEndHour]=React.useState("");
+
+  {ScrollToTop()}
   return (
     <LayoutPromotor>
-      <div className=" bg-transparent" >
       <div className="">
         <div className="pl-5 pr-10 md:w-[450px] md:mx-auto lg:w-[600px] pb-7">
           <div
@@ -110,18 +119,80 @@ const CreateEvent = () => {
                       <li
                         className=" hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
                         onClick={() => {
-                          setEventType("Online");
+                          setEventCategory("Music");
+                          setEventCategoryId(1);
                         }}
                       >
-                        Online
+                        Music
                       </li>
                       <li
                         className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
                         onClick={() => {
-                          setEventType("Offline");
+                          setEventCategory("Nightlife");
+                          setEventCategoryId(2)
                         }}
                       >
-                        Offline
+                        Nightlife
+                      </li>
+                      <li
+                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+                        onClick={() => {
+                          setEventCategory("Performing & VisualArt");
+                          setEventCategoryId(3)
+
+                        }}
+                      >
+                        Performing & VisualArt
+                      </li>
+                      <li
+                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+                        onClick={() => {
+                          setEventCategory("Holidays");
+                          setEventCategoryId(9)
+
+                        }}
+                      >
+                        Holidays
+                      </li>
+                      <li
+                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+                        onClick={() => {
+                          setEventCategory("Health");
+                          setEventCategoryId(10)
+
+                        }}
+                      >
+                        Health
+                      </li>
+                      <li
+                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+                        onClick={() => {
+                          setEventCategory("Hobbies");
+                          setEventCategoryId(11)
+
+                        }}
+                      >
+                        Hobbies
+                      </li>
+                      <li
+                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+                        onClick={() => {
+                          setEventCategory("Business");
+                          setEventCategoryId(12)
+
+                        }}
+                      >
+                        Business
+                      </li>
+                      <li
+                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+                        onClick={() => {
+                          setEventCategory("Food & Drink");
+                          setEventCategoryId(13)
+
+                        }}
+                      >
+                        Food & Drink
                       </li>
                     </div>
                   </ul>
@@ -150,6 +221,7 @@ const CreateEvent = () => {
                   type="url"
                   className="w-full py-3 bg-slate-200 focus:outline-none"
                   placeholder="Select event address or link address "
+                  onChange={(e)=>setEventAddress(e.target.value)}
                 />
               </div>
               <div className="flex pl-2 mt-3 items-center text-sm bg-slate-200 gap-2 shadow-md rounded-sm focus:border-2 focus:border-blue-600">
@@ -160,6 +232,7 @@ const CreateEvent = () => {
                   type="url"
                   className="w-full py-3 bg-slate-200 focus:outline-none"
                   placeholder="Select country your event took place"
+                  onChange={(e)=>setEventCity(e.target.value)}
                 />
               </div>
             </div>
@@ -182,6 +255,7 @@ const CreateEvent = () => {
                       <input
                         type="date"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
+                        onChange={(e)=>setEventDateStart(e.target.value)}
                       />
                     </label>
                   </div>
@@ -191,6 +265,7 @@ const CreateEvent = () => {
                       <input
                         type="date"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
+                        onChange={(e)=>setEventDateEnds(e.target.value)}
                       />
                     </label>
                   </div>
@@ -203,6 +278,7 @@ const CreateEvent = () => {
                       <input
                         type="time"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
+                        onChange={(e)=>setEventStartHour(e.target.value)}
                       />
                     </label>
                   </div>
@@ -212,6 +288,7 @@ const CreateEvent = () => {
                       <input
                         type="time"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
+                        onChange={(e)=>setEventEndHour(e.target.value)}
                       />
                     </label>
                   </div>
@@ -221,7 +298,7 @@ const CreateEvent = () => {
           </form>
         </div>
       </div>
-      <div className="border-t-[1px] -z-30 border-slate-300"></div>
+      <div className="border-t-[1px] border-slate-300 -z-50"></div>
       {/* BUTTON DISCARD & SAVE */}
       <div className="flex gap-3 mt-6 justify-end pr-4 pb-6 ">
         <button
@@ -233,13 +310,17 @@ const CreateEvent = () => {
         <button
           type="button"
           className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
-          onClick={() => navigate("/create/event/details")}
+          onClick={() => {
+            const result = {eventTitle,eventType,eventCategory,eventAddress,eventCity,eventDateStart,eventDateEnds,eventStartHour,eventEndHour}
+            const resultStringified = JSON.stringify(result)
+            sessionStorage.setItem("basic_info",resultStringified)
+            navigate("/create/event/details")
+          }}
         >
           Save & Continue
         </button>
       </div>
       <Footer />
-    </div>
     </LayoutPromotor>
   );
 };

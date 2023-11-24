@@ -10,13 +10,28 @@ import {
   PiCheckBold,
 } from "react-icons/pi";
 const PromotorSubSideBar = (props) => {
+
   const menuSideBar = [
     { name: "Basic Info", number: <PiNumberOneBold />, numberSm:<PiNumberCircleOneBold/> },
     { name: "Details", number: <PiNumberTwoBold />, numberSm:<PiNumberCircleTwoBold/> },
     { name: "Tickets", number: <PiNumberThreeBold />, numberSm:<PiNumberCircleThreeBold/> },
     { name: "Publish", number: <PiNumberFourBold />, numberSm:<PiNumberCircleFourBold/> },
   ];
-
+  const dayName =["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"]
+  const monthName =[
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Agt",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const printMenuSidebarSm = () => {
     return menuSideBar.map((val,idx)=> {
       if (props.page===val.name){
@@ -59,9 +74,9 @@ const PromotorSubSideBar = (props) => {
             <span className="cursor-pointer font-bold hover:text-blue-600">
               {"<"}
             </span>
-            Event Title,
+            {props.eventTitle},
           </p>
-          <p className="pl-8 text-sm ">Wed, Oct 10, 2023 19:00</p>
+          <p className="pl-8 text-sm ">{dayName[props.day]}, {monthName[props.month]} {props.date}, {props.year} {props.start_hour}</p>
         </div>
         <div className=" w-full">
           <ul className="flex justify-evenly  text-sm">
@@ -74,12 +89,12 @@ const PromotorSubSideBar = (props) => {
       {/* SUB SIDEBAR UNTUK MD & LG */}
       <div className="hidden -z-20 fixed ml-[64px] w-[140px] h-screen bg-slate-200  border-l-[2px] border-l-orange-400  pt-4 md:block lg:w-[200px]">
         <div className="flex px-2 flex-col border-b-[1px] h-fit pb-6 border-b-black gap-y-1">
-          <p>Event Name</p>
+          <p>{props.eventTitle}</p>
           <p className=" text-sm">
-            Wed,<span>10 October 2023 </span>
+            {dayName[props.day]},<span>{props.date} {monthName[props.month]} {props.year} </span>
           </p>
           <p className="text-sm ">
-            19:00 - <span>23:00</span>{" "}
+            {props.start_hour} - <span>{props.end_hour}</span>{" "}
           </p>
         </div>
         <div className="">

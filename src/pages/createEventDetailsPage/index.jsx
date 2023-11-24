@@ -5,15 +5,38 @@ import React from "react";
 import { AiOutlineCloudUpload, AiOutlineFileImage } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import Footer from "../../components/Footer";
+import ScrollToTop from "../../hooks/scrollToTop";
 
 const CreateEventDetails = () => {
   const navigate = useNavigate();
   const [media, setMedia] = React.useState(null);
   const [fileName, setFileName] = React.useState("No selected file");
+  const [eventDesc, setEventDesc]=React.useState("")
+  // const [dayName, setDayName] = React.useState(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"])
+  // const [monthName, setMonthName] = React.useState([
+    // "Jan",
+    // "Feb",
+    // "Mar",
+    // "Apr",
+    // "Mei",
+    // "Jun",
+    // "Jul",
+    // "Agt",
+    // "Sep",
+    // "Oct",
+    // "Nov",
+    // "Dec",
+  // ]);
 
+  const eventBasic_info = sessionStorage.getItem("basic_info")
+  const eventBasic_infoParsed = JSON.parse(eventBasic_info)
+  const eventStart = new Date (eventBasic_infoParsed.eventDateStart)
+
+
+  {ScrollToTop()}
   return (
     <LayoutPromotor>
-      <PromotorSubSideBar page="Details" />
+      <PromotorSubSideBar page="Details" eventTitle={eventBasic_infoParsed.eventTitle} day={eventStart.getDay()} month={eventStart.getMonth()} date={eventStart.getDate()} year={eventStart.getFullYear()} start_hour={eventBasic_infoParsed.eventStartHour} />
       <div className="w-full pb-7 pl-5 pr-10 md:w-[500px] md:mx-auto lg:w-[600px]">
         {/* Maint Event Image */}
         <form action="" className=" md:ml-14">
@@ -78,6 +101,7 @@ const CreateEventDetails = () => {
                 name=""
                 id=""
                 className=" border-b-[2px] border-blue-500 p-2 text-sm bg-slate-200 h-full w-full focus:outline-none resize-none"
+                onChange={(e)=>setEventDesc(e.target.value)}
               ></textarea>
             </div>
           </div>
@@ -94,7 +118,12 @@ const CreateEventDetails = () => {
         <button
           type="button"
           className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
-          onClick={() => navigate("/manage/ticket")}
+          onClick={() => {
+            const resultDetails = {fileName,eventDesc}
+            const resultDetailsStringified = JSON.stringify(resultDetails)
+            sessionStorage.setItem("details", resultDetailsStringified)
+            navigate("/manage/ticket")
+          }}
         >
           Save & Continue
         </button>

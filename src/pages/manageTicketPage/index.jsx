@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiDiscount1 } from "react-icons/ci";
+import ScrollToTop from "../../hooks/scrollToTop";
+import { current } from "@reduxjs/toolkit";
 
 const ManageTicket = () => {
   const [ticketOption, setTicketOption] = React.useState(false);
@@ -18,14 +20,13 @@ const ManageTicket = () => {
   const [buttonFree, setButtonFree] = React.useState(false);
   const [countMax, setCountMax] = React.useState(0);
   const [countMax2, setCountMax2] = React.useState(0);
-  const [ticketName, setTicketName] = React.useState("");
   const [promoName, setPromoName] = React.useState("");
   const [newTicketPage, setNewTicketPage] = React.useState(false);
   const [ticketLandingMd, setTicketLandingMd] = React.useState(true);
-  const [admissionPage, setAdmissionPage] = React.useState(true);
+  const [admissionPage, setAdmissionPage] = React.useState(false);
   const [admissionBlue, setAdmissionBlue] = React.useState(true);
   const [promoBlue, setPromoBlue] = React.useState(false);
-  const [admissionPageMd, setAdmissionPageMd] = React.useState(true);
+  const [admissionPageMd, setAdmissionPageMd] = React.useState(false);
   const [editTicket, setEditTicket] = React.useState(false);
   const [promCodePage, setPromCodePage] = React.useState(false);
   const [promCodePageMd, setPromCodePageMd] = React.useState(false);
@@ -33,6 +34,7 @@ const ManageTicket = () => {
   const [promoOption, setPromoOption] = React.useState(false);
   const [newPromPage, setNewPromPage] = React.useState(false);
   const [toggleModal, setToggleModal] = React.useState(false);
+  const [dayName, setDayName] = React.useState(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"])
   const [monthName, setMonthName] = React.useState([
     "Jan",
     "Feb",
@@ -47,39 +49,56 @@ const ManageTicket = () => {
     "Nov",
     "Dec",
   ]);
+
+  // ini untuk setting SESSION STORAGE
+  // SEESION STORAGE UNTUK TICKET
+  const [ticketFee,setTicketFee]=React.useState("")
+  const [ticketName, setTicketName] = React.useState("");
+  const [ticketStock, setTicketStock] = React.useState("");
+  const [ticketPrice, setTicketPrice] = React.useState("");
+  const [ticketSalesStartDate,setTicketSalesStartDate]=React.useState("")
+  const [ticketSalesEndDate,setTicketSalesEndDate]=React.useState("")
+  const [ticketSalesStartHour,setTicketSalesStartHour]=React.useState("")
+  const [ticketSalesEndHour,setTicketSalesEndHour]=React.useState("")
+
+  // SESSION STORAGE UNTUK PROMO
+
   const navigate = useNavigate();
-  const [dataTicket, setDataTicket] = React.useState([
-    {
-      ticketType: "paid",
-      ticketName: "Regular",
-      ticketStock: 1000,
-      ticketPrice: 100000,
-      ticketSalesStart: new Date("2023-10-17T19:30"),
-      ticketSalesEnd: new Date("2023-11-18T23:00"),
-      ticketPromo: true,
-      promoId: 1,
-    },
-    {
-      ticketType: "paid",
-      ticketName: "Early Bird Ticket",
-      ticketStock: 1000,
-      ticketPrice: 100000,
-      ticketSalesStart: new Date("2023-10-01T19:30"),
-      ticketSalesEnd: new Date("2023-10-11T21:00"),
-      ticketPromo: false,
-      promoId: null,
-    },
-    {
-      ticketType: "paid",
-      ticketName: "VVIP Ticket",
-      ticketStock: 1000,
-      ticketPrice: 100000,
-      ticketSalesStart: new Date("2023-10-30T19:30"),
-      ticketSalesEnd: new Date("2024-01-30T19:30"),
-      ticketPromo: true,
-      promoId: 2,
-    },
-  ]);
+
+  // DATA TICKET UNTUK DI PUSH KE SESSION STORAGE
+  const [dataTicket, setDataTicket] = React.useState([]
+    // {
+    //   ticketType: "paid",
+    //   ticketName: "Regular",
+    //   ticketStock: 1000,
+    //   ticketPrice: 100000,
+    //   ticketSalesStart: new Date("2023-10-17T19:30"),
+    //   ticketSalesEnd: new Date("2023-11-18T23:00"),
+    //   ticketPromo: true,
+    //   promoId: 1,
+    // },
+    // {
+    //   ticketType: "paid",
+    //   ticketName: "Early Bird Ticket",
+    //   ticketStock: 1000,
+    //   ticketPrice: 100000,
+    //   ticketSalesStart: new Date("2023-10-01T19:30"),
+    //   ticketSalesEnd: new Date("2023-10-11T21:00"),
+    //   ticketPromo: false,
+    //   promoId: null,
+    // },
+    // {
+    //   ticketType: "paid",
+    //   ticketName: "VVIP Ticket",
+    //   ticketStock: 1000,
+    //   ticketPrice: 100000,
+    //   ticketSalesStart: new Date("2023-10-30T19:30"),
+    //   ticketSalesEnd: new Date("2024-01-30T19:30"),
+    //   ticketPromo: true,
+    //   promoId: 2,
+    // },
+  );
+  // DATA PROMO UNTUK DI PUSH KE SESSION STORAGE
   const [dataPromo, setDataPromo] = React.useState([
     {
       promoName: "HalfOff",
@@ -103,6 +122,13 @@ const ManageTicket = () => {
       discountEnd: new Date("2024-01-30T19:30"),
     },
   ]);
+
+  // Setting get session storage event info basic and detail
+  const eventBasic_info = sessionStorage.getItem("basic_info")
+  const eventBasic_infoParsed = JSON.parse(eventBasic_info)
+  const eventStart = new Date (eventBasic_infoParsed.eventDateStart)
+
+  
 
   const printDataTicket = () => {
     const today = new Date();
@@ -274,7 +300,8 @@ const ManageTicket = () => {
   };
 
   const printTicketLanding = () => {
-    if (!dataTicket) {
+
+    if (dataTicket.length<1) {
       console.log("masuk tidak ada data");
       return (
         <div className={`w-full justify-center flex md:h-[658px]`}>
@@ -305,18 +332,11 @@ const ManageTicket = () => {
               </button>
             </div>
           </div>
-          {/* ticket option edit */}
-          <div
-            className={`${ticketOption ? "block" : "hidden"} md:${
-              ticketOption ? "relative" : "hidden"
-            }`}
-          >
-            {/* Box Add Ticket */}
-            {addTicketBox()}
-          </div>
+
         </div>
       );
     } else {
+      console.log("masuk ada data cuy");
       return (
         <div className={` md:mt-0  md:mx-auto`}>
           <div className="flex flex-col lg:w-[700px] md:w-[530px]">
@@ -515,16 +535,9 @@ const ManageTicket = () => {
     }
   };
 
-  const addTicketBox = (
-    type,
-    name,
-    quantity,
-    price,
-    dateStart,
-    dateEnd,
-    hourStart,
-    hourEnd
-  ) => {
+  const addTicketBox = () => {
+        // SETTING untuk storage
+  
     return (
       <div
         className={`bg-white block w-[350px] pt-4 h-fit  md:shadow-xl md:flex-col md:right-0 md:w-[400px] md:absolute`}
@@ -547,6 +560,7 @@ const ManageTicket = () => {
               onClick={() => {
                 setButtonPaid(true);
                 setButtonFree(false);
+                setTicketFee("paid")
               }}
             >
               Paid
@@ -560,6 +574,7 @@ const ManageTicket = () => {
               onClick={() => {
                 setButtonFree(true);
                 setButtonPaid(false);
+                setTicketFee("free")
               }}
             >
               Free
@@ -580,6 +595,7 @@ const ManageTicket = () => {
                   setCountMax(e.target.value.length);
                   setTicketName(e.target.value);
                 }}
+                value={ticketName}
               />
             </div>
             <div className="w-full mx-auto text-xs text-right mt-1">
@@ -597,7 +613,8 @@ const ManageTicket = () => {
                 className="ticketName bg-slate-100 focus:outline-none py-1 text-sm "
                 type="number"
                 placeholder="0"
-                onChange={(e) => {}}
+                onChange={(e) => {setTicketStock(e.target.value)}}
+                value={ticketStock}
               />
             </div>
           </div>
@@ -614,7 +631,8 @@ const ManageTicket = () => {
                   className="ticketPrice w-full pr-1 bg-slate-100 focus:outline-none py-1 text-sm "
                   type="number"
                   placeholder="0"
-                  onChange={(e) => {}}
+                  onChange={(e) => {setTicketPrice(e.target.value)}}
+                  value={ticketPrice}
                 />
               </div>
             </div>
@@ -631,6 +649,8 @@ const ManageTicket = () => {
                     <input
                       type="date"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
+                      onChange={(e)=>{setTicketSalesStartDate(e.target.value)}}
+                      value={ticketSalesStartDate}
                     />
                   </label>
                 </div>
@@ -640,6 +660,8 @@ const ManageTicket = () => {
                     <input
                       type="date"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
+                      onChange={(e)=>{setTicketSalesEndDate(e.target.value)}}
+                      value={ticketSalesEndDate}
                     />
                   </label>
                 </div>
@@ -652,6 +674,8 @@ const ManageTicket = () => {
                     <input
                       type="time"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
+                      onChange={(e)=>{setTicketSalesStartHour(e.target.value)}}
+                      value={ticketSalesStartHour}
                     />
                   </label>
                 </div>
@@ -661,6 +685,8 @@ const ManageTicket = () => {
                     <input
                       type="time"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
+                      onChange={(e)=>{setTicketSalesEndHour(e.target.value)}}
+                      value={ticketSalesEndHour}
                     />
                   </label>
                 </div>
@@ -676,7 +702,19 @@ const ManageTicket = () => {
               onClick={() => {
                 setTicketOption(false);
                 setTicketLanding(true);
-                setAdmissionPage(true);
+                
+
+                // RESTART VALUE
+                setButtonPaid(false);
+                setButtonFree(false);
+                setTicketFee("")
+                setTicketSalesEndHour("")
+                setTicketSalesStartHour("")
+                setTicketSalesEndDate("")
+                setTicketSalesStartDate("")
+                setTicketName("")
+                setTicketPrice("")
+                setTicketStock("")
               }}
             >
               Cancel
@@ -689,6 +727,56 @@ const ManageTicket = () => {
                 setTicketLandingMd(false);
                 setTicketOption(false);
                 setAdmissionPage(true);
+                setAdmissionPageMd(true);
+
+                let ticketInfo = {ticketFee,ticketName,ticketStock,ticketPrice,ticketSalesStartDate,ticketSalesEndDate,ticketSalesStartHour,ticketSalesEndHour,ticketSalesStart:new Date(ticketSalesStartDate+"T"+ticketSalesStartHour), ticketSalesEnd:new Date(ticketSalesEndDate+"T"+ticketSalesEndHour)}
+                
+                setDataTicket(current=>[...current,{...ticketInfo}])
+                console.log("ini data ticket", dataTicket);
+                const dataTicketStringified = JSON.stringify(...dataTicket)
+                console.log("ini data ticket stringified", dataTicketStringified);
+
+                if(sessionStorage.getItem("ticketInfo")){
+                  console.log("masuk nambah ticket");
+                  sessionStorage.setItem("ticketInfo",dataTicketStringified)
+                  let addTicket = sessionStorage.getItem("ticketInfo")
+                  let addTicketParsed = JSON.parse(addTicket)
+                  console.log("ini add ticket parsed",addTicketParsed);
+                  setDataTicket(current=>[...current,{...addTicketParsed}])
+                  console.log("sudah di set datanya");
+
+                  setButtonPaid(false);
+                setButtonFree(false);
+                setTicketFee("")
+                setTicketSalesEndHour("")
+                setTicketSalesStartHour("")
+                setTicketSalesEndDate("")
+                setTicketSalesStartDate("")
+                setTicketName("")
+                setTicketPrice("")
+                setTicketStock("")
+                } else {
+                  console.log("masuk add ticket tanpa ada data");
+                  sessionStorage.setItem("ticketInfo",dataTicketStringified)
+                  let addTicket = sessionStorage.getItem("ticketInfo")
+                  console.log("ini data tiket 1", addTicket);
+                  let addTicketParsed = JSON.parse(addTicket)
+                  console.log("ini data tiket cuy", addTicketParsed);
+                  setDataTicket([addTicketParsed])
+
+                  setButtonPaid(false);
+                setButtonFree(false);
+                setTicketFee("")
+                setTicketSalesEndHour("")
+                setTicketSalesStartHour("")
+                setTicketSalesEndDate("")
+                setTicketSalesStartDate("")
+                setTicketName("")
+                setTicketPrice("")
+                setTicketStock("")
+                  }
+
+                
               }}
             >
               Save
@@ -854,10 +942,14 @@ const ManageTicket = () => {
     );
   };
 
+  React.useEffect(()=>{
+    
+  })
+  {ScrollToTop()}
   return (
     <LayoutPromotor>
       <div className="flex flex-col  md:flex-row ">
-        <PromotorSubSideBar page="Tickets" />
+        <PromotorSubSideBar page="Tickets" eventTitle={eventBasic_infoParsed.eventTitle} day={eventStart.getDay()} month={eventStart.getMonth()} date={eventStart.getDate()} year={eventStart.getFullYear()} start_hour={eventBasic_infoParsed.eventStartHour} />
         <div className=" md:flex md:flex-col md:ml-[250px] lg:ml-[300px]">
           {printTicketLanding()}
           <div className="">{admissionPageContent()}</div>
