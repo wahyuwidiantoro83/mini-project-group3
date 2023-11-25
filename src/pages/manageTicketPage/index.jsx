@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../../components/Footer";
 import LayoutPromotor from "../../components/PromotorLayout";
 import PromotorSubSideBar from "../../components/PromotorSubSideBar";
@@ -20,7 +20,6 @@ const ManageTicket = () => {
   const [buttonFree, setButtonFree] = React.useState(false);
   const [countMax, setCountMax] = React.useState(0);
   const [countMax2, setCountMax2] = React.useState(0);
-  const [promoName, setPromoName] = React.useState("");
   const [newTicketPage, setNewTicketPage] = React.useState(false);
   const [ticketLandingMd, setTicketLandingMd] = React.useState(true);
   const [admissionPage, setAdmissionPage] = React.useState(false);
@@ -34,7 +33,15 @@ const ManageTicket = () => {
   const [promoOption, setPromoOption] = React.useState(false);
   const [newPromPage, setNewPromPage] = React.useState(false);
   const [toggleModal, setToggleModal] = React.useState(false);
-  const [dayName, setDayName] = React.useState(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"])
+  const [dayName, setDayName] = React.useState([
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ]);
   const [monthName, setMonthName] = React.useState([
     "Jan",
     "Feb",
@@ -52,88 +59,61 @@ const ManageTicket = () => {
 
   // ini untuk setting SESSION STORAGE
   // SEESION STORAGE UNTUK TICKET
-  const [ticketFee,setTicketFee]=React.useState("")
+  const [ticketFee, setTicketFee] = React.useState("");
   const [ticketName, setTicketName] = React.useState("");
   const [ticketStock, setTicketStock] = React.useState("");
   const [ticketPrice, setTicketPrice] = React.useState("");
-  const [ticketSalesStartDate,setTicketSalesStartDate]=React.useState("")
-  const [ticketSalesEndDate,setTicketSalesEndDate]=React.useState("")
-  const [ticketSalesStartHour,setTicketSalesStartHour]=React.useState("")
-  const [ticketSalesEndHour,setTicketSalesEndHour]=React.useState("")
+  const [ticketSalesStartDate, setTicketSalesStartDate] = React.useState("");
+  const [ticketSalesEndDate, setTicketSalesEndDate] = React.useState("");
+  const [ticketSalesStartHour, setTicketSalesStartHour] = React.useState("");
+  const [ticketSalesEndHour, setTicketSalesEndHour] = React.useState("");
 
   // SESSION STORAGE UNTUK PROMO
+  const [promoName, setPromoName] = React.useState("");
+  const [promoLimit, setPromoLimit] = React.useState("");
+  const [discountAmount, setDiscountAmount] = React.useState("");
+  const [applyTo, setApplyTo] = React.useState([]);
+  const [ticketNameInModal, setTicketNameInModal] = React.useState([]);
 
   const navigate = useNavigate();
 
   // DATA TICKET UNTUK DI PUSH KE SESSION STORAGE
-  const [dataTicket, setDataTicket] = React.useState([]
-    // {
-    //   ticketType: "paid",
-    //   ticketName: "Regular",
-    //   ticketStock: 1000,
-    //   ticketPrice: 100000,
-    //   ticketSalesStart: new Date("2023-10-17T19:30"),
-    //   ticketSalesEnd: new Date("2023-11-18T23:00"),
-    //   ticketPromo: true,
-    //   promoId: 1,
-    // },
-    // {
-    //   ticketType: "paid",
-    //   ticketName: "Early Bird Ticket",
-    //   ticketStock: 1000,
-    //   ticketPrice: 100000,
-    //   ticketSalesStart: new Date("2023-10-01T19:30"),
-    //   ticketSalesEnd: new Date("2023-10-11T21:00"),
-    //   ticketPromo: false,
-    //   promoId: null,
-    // },
-    // {
-    //   ticketType: "paid",
-    //   ticketName: "VVIP Ticket",
-    //   ticketStock: 1000,
-    //   ticketPrice: 100000,
-    //   ticketSalesStart: new Date("2023-10-30T19:30"),
-    //   ticketSalesEnd: new Date("2024-01-30T19:30"),
-    //   ticketPromo: true,
-    //   promoId: 2,
-    // },
-  );
+  const [dataTicket, setDataTicket] = React.useState([]);
   // DATA PROMO UNTUK DI PUSH KE SESSION STORAGE
   const [dataPromo, setDataPromo] = React.useState([
-    {
-      promoName: "HalfOff",
-      discount: 1000000,
-      uses: 10,
-      discountStart: new Date("2023-10-17T19:30"),
-      discountEnd: new Date("2023-11-18T23:00"),
-    },
-    {
-      promoName: "twentyPercentOff",
-      discount: 20,
-      uses: 10,
-      discountStart: new Date("2023-10-01T19:30"),
-      discountEnd: new Date("2023-10-11T21:00"),
-    },
-    {
-      promoName: "tenPercentOff",
-      discount: 10,
-      uses: 10,
-      discountStart: new Date("2023-10-30T19:30"),
-      discountEnd: new Date("2024-01-30T19:30"),
-    },
+    // {
+    //   promoName: "HalfOff",
+    //   discount: 1000000,
+    //   uses: 10,
+    //   discountStart: new Date("2023-10-17T19:30"),
+    //   discountEnd: new Date("2023-11-18T23:00"),
+    // },
+    // {
+    //   promoName: "twentyPercentOff",
+    //   discount: 20,
+    //   uses: 10,
+    //   discountStart: new Date("2023-10-01T19:30"),
+    //   discountEnd: new Date("2023-10-11T21:00"),
+    // },
+    // {
+    //   promoName: "tenPercentOff",
+    //   discount: 10,
+    //   uses: 10,
+    //   discountStart: new Date("2023-10-30T19:30"),
+    //   discountEnd: new Date("2024-01-30T19:30"),
+    // },
   ]);
 
   // Setting get session storage event info basic and detail
-  const eventBasic_info = sessionStorage.getItem("basic_info")
-  const eventBasic_infoParsed = JSON.parse(eventBasic_info)
-  const eventStart = new Date (eventBasic_infoParsed.eventDateStart)
-
-  
+  const eventBasic_info = sessionStorage.getItem("basic_info");
+  const eventBasic_infoParsed = JSON.parse(eventBasic_info);
+  const eventStart = new Date(eventBasic_infoParsed.eventDateStart);
 
   const printDataTicket = () => {
     const today = new Date();
+    // console.log("nambah tidak?",dataTicket);
     return dataTicket.map((val, idx) => {
-      if (today > val.ticketSalesEnd) {
+      if (today > new Date(val.ticketSalesEnd)) {
         return (
           <li
             key={idx}
@@ -148,25 +128,25 @@ const ManageTicket = () => {
                 <span>
                   <FaCircle className="text-[9px] text-slate-500" />
                 </span>
-                Ended {monthName[val.ticketSalesEnd.getMonth()]}{" "}
-                {val.ticketSalesEnd.getDate() < 10
-                  ? `0${val.ticketSalesEnd.getDate()}`
-                  : val.ticketSalesEnd.getDate()}
-                , {val.ticketSalesEnd.getFullYear()} at{" "}
-                {val.ticketSalesEnd.getHours() < 10
-                  ? `0${val.ticketSalesEnd.getHours()}`
-                  : val.ticketSalesEnd.getHours()}
+                Ended {monthName[new Date(val.ticketSalesEnd).getMonth()]}{" "}
+                {new Date(val.ticketSalesEnd).getDate() < 10
+                  ? `0${new Date(val.ticketSalesEnd).getDate()}`
+                  : new Date(val.ticketSalesEnd).getDate()}
+                , {new Date(val.ticketSalesEnd).getFullYear()} at{" "}
+                {new Date(val.ticketSalesEnd).getHours() < 10
+                  ? `0${new Date(val.ticketSalesEnd).getHours()}`
+                  : new Date(val.ticketSalesEnd).getHours()}
                 :
-                {val.ticketSalesEnd.getMinutes() < 10
-                  ? `0${val.ticketSalesEnd.getMinutes()}`
-                  : val.ticketSalesEnd.getMinutes()}
+                {new Date(val.ticketSalesEnd).getMinutes() < 10
+                  ? `0${new Date(val.ticketSalesEnd).getMinutes()}`
+                  : new Date(val.ticketSalesEnd).getMinutes()}
               </p>
             </div>
             <div className="w-[60px]  px-1 whitespace-nowrap text">
               0/{val.ticketStock}
             </div>
             <div className="w-[100px] px-1 whitespace-nowrap overflow-hidden text-ellipsis  group-hover:overflow-visible group-hover:whitespace-normal">
-              Rp {val.ticketPrice.toLocaleString("id")}
+              Rp {parseInt(val.ticketPrice).toLocaleString("id")}
             </div>
             <div className={`button${idx} relative flex text-lg gap-2`}>
               <button
@@ -175,14 +155,28 @@ const ManageTicket = () => {
               >
                 <CiEdit />
               </button>
-              <button className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 ">
+              <button
+                className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 "
+                onClick={() => {
+                  let getTicketPrint = sessionStorage.getItem("ticket-info");
+                  let getTicketPrintParsed = JSON.parse(getTicketPrint);
+                  getTicketPrintParsed.splice(idx, 1);
+                  let getTicketPrintStringified =
+                    JSON.stringify(getTicketPrintParsed);
+                  sessionStorage.setItem(
+                    "ticket-info",
+                    getTicketPrintStringified
+                  );
+                  setDataTicket(getTicketPrintParsed);
+                }}
+              >
                 <RiDeleteBinLine />
               </button>
             </div>
           </li>
         );
       } else {
-        if (val.ticketSalesEnd.getDate() === new Date().getDate()) {
+        if (new Date(val.ticketSalesEnd).getDate() === new Date().getDate()) {
           return (
             <li
               key={idx}
@@ -198,20 +192,20 @@ const ManageTicket = () => {
                     <FaCircle className="text-[9px] text-blue-600" />
                   </span>
                   On Sale | Ends today at{" "}
-                  {val.ticketSalesEnd.getHours() < 10
-                    ? `0${val.ticketSalesEnd.getHours()}`
-                    : val.ticketSalesEnd.getHours()}
+                  {new Date(val.ticketSalesEnd).getHours() < 10
+                    ? `0${new Date(val.ticketSalesEnd).getHours()}`
+                    : new Date(val.ticketSalesEnd).getHours()}
                   :
                   {val.ticketSalesEnd.getMinutes() < 10
-                    ? `0${val.ticketSalesEnd.getMinutes()}`
-                    : val.ticketSalesEnd.getMinutes()}
+                    ? `0${new Date(val.ticketSalesEnd).getMinutes()}`
+                    : new Date(val.ticketSalesEnd).getMinutes()}
                 </p>
               </div>
               <div className="w-[60px]  px-1 whitespace-nowrap text-clip text">
                 0/{val.ticketStock}
               </div>
               <div className="w-[100px] px-1 whitespace-nowrap overflow-hidden text-ellipsis  group-hover:overflow-visible group-hover:whitespace-normal">
-                Rp {val.ticketPrice.toLocaleString("id")}
+                Rp {parseInt(val.ticketPrice).toLocaleString("id")}
               </div>
 
               <div className={`button${idx} relative flex text-lg gap-2`}>
@@ -221,7 +215,21 @@ const ManageTicket = () => {
                 >
                   <CiEdit />
                 </button>
-                <button className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 ">
+                <button
+                  className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 "
+                  onClick={() => {
+                    let getTicketPrint = sessionStorage.getItem("ticket-info");
+                    let getTicketPrintParsed = JSON.parse(getTicketPrint);
+                    getTicketPrintParsed.splice(idx, 1);
+                    let getTicketPrintStringified =
+                      JSON.stringify(getTicketPrintParsed);
+                    sessionStorage.setItem(
+                      "ticket-info",
+                      getTicketPrintStringified
+                    );
+                    setDataTicket(getTicketPrintParsed);
+                  }}
+                >
                   <RiDeleteBinLine />
                 </button>
               </div>
@@ -239,23 +247,24 @@ const ManageTicket = () => {
                   <span>
                     <FaCircle className="text-[9px] text-green-600" />
                   </span>
-                  On Sale | Ends {monthName[val.ticketSalesEnd.getMonth()]}{" "}
-                  {val.ticketSalesEnd.getDate() < 10
-                    ? `0${val.ticketSalesEnd.getDate()}`
-                    : val.ticketSalesEnd.getDate()}
-                  , {val.ticketSalesEnd.getFullYear()} at{" "}
-                  {val.ticketSalesEnd.getHours() < 10
-                    ? `0${val.ticketSalesEnd.getHours()}`
-                    : val.ticketSalesEnd.getHours()}
+                  On Sale | Ends{" "}
+                  {monthName[new Date(val.ticketSalesEnd).getMonth()]}{" "}
+                  {new Date(val.ticketSalesEnd).getDate() < 10
+                    ? `0${new Date(val.ticketSalesEnd).getDate()}`
+                    : new Date(val.ticketSalesEnd).getDate()}
+                  , {new Date(val.ticketSalesEnd).getFullYear()} at{" "}
+                  {new Date(val.ticketSalesEnd).getHours() < 10
+                    ? `0${new Date(val.ticketSalesEnd).getHours()}`
+                    : new Date(val.ticketSalesEnd).getHours()}
                   :
-                  {val.ticketSalesEnd.getMinutes() < 10
-                    ? `0${val.ticketSalesEnd.getMinutes()}`
-                    : val.ticketSalesEnd.getMinutes()}
+                  {new Date(val.ticketSalesEnd).getMinutes() < 10
+                    ? `0${new Date(val.ticketSalesEnd).getMinutes()}`
+                    : new Date(val.ticketSalesEnd).getMinutes()}
                 </p>
               </div>
               <div className="w-[60px] px-1 whitespace-nowrap">0/100</div>
               <div className="w-[100px] px-1 whitespace-nowrap overflow-hidden text-ellipsis  group-hover:overflow-visible group-hover:whitespace-normal">
-                Rp {val.ticketPrice.toLocaleString("id")}
+                Rp {parseInt(val.ticketPrice).toLocaleString("id")}
               </div>
               <div className={`button${idx} relative flex text-lg gap-2`}>
                 <button
@@ -264,7 +273,21 @@ const ManageTicket = () => {
                 >
                   <CiEdit />
                 </button>
-                <button className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 ">
+                <button
+                  className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 "
+                  onClick={() => {
+                    let getTicketPrint = sessionStorage.getItem("ticket-info");
+                    let getTicketPrintParsed = JSON.parse(getTicketPrint);
+                    getTicketPrintParsed.splice(idx, 1);
+                    let getTicketPrintStringified =
+                      JSON.stringify(getTicketPrintParsed);
+                    sessionStorage.setItem(
+                      "ticket-info",
+                      getTicketPrintStringified
+                    );
+                    setDataTicket(getTicketPrintParsed);
+                  }}
+                >
                   <RiDeleteBinLine />
                 </button>
               </div>
@@ -276,32 +299,59 @@ const ManageTicket = () => {
   };
 
   const printDiscountTo = () => {
-    return dataTicket.map((val, idx) => {
-      return (
-        <tr
-          key={idx}
-          className="group cursor-default group-hover:bg-slate-300 h-12"
-        >
-          <td className="group-hover:bg-slate-300">
-            <input
-              type="checkbox"
-              name="applyDiscountTo"
-              id=""
-              value={val.ticketName}
-            />
-          </td>
-          <td className="group-hover:bg-slate-300">{val.ticketName}</td>
-          <td className="group-hover:bg-slate-300">
-            Rp {val.ticketPrice.toLocaleString("id")}
-          </td>
-        </tr>
-      );
-    });
+    if (dataTicket) {
+      return dataTicket.map((val, idx) => {
+        return (
+          <tr
+            key={idx}
+            className="group cursor-default group-hover:bg-slate-300 h-12"
+          >
+            <td className="group-hover:bg-slate-300">
+              <input
+                type="checkbox"
+                name="applyDiscountTo"
+                id=""
+                value={val.ticketName}
+              />
+            </td>
+            <td className="group-hover:bg-slate-300">{val.ticketName}</td>
+            <td className="group-hover:bg-slate-300">
+              Rp {val.ticketPrice.toLocaleString("id")}
+            </td>
+          </tr>
+        );
+      });
+    }
   };
 
   const printTicketLanding = () => {
+    // React.useEffect(() => {
+    //   let getTicket = sessionStorage.getItem("ticket-info");
+    //   let getTicketParse = JSON.parse(getTicket);
+    //   setDataTicket(getTicketParse);
+    // }, [ticketLanding]);
 
-    if (dataTicket.length<1) {
+    const onHandleAdmissionTicketLanding = () => {
+      setAdmissionPage(true);
+      setAdmissionPageMd(true);
+      setPromCodePage(false);
+      setPromCodePageMd(false);
+      setPromoOption(false);
+      setPromoBlue(false);
+      setAdmissionBlue(true);
+    };
+
+    const onHandlePromoTicketLanding = () => {
+      setAdmissionPage(false);
+      setAdmissionPageMd(false);
+      setPromCodePage(true);
+      setPromCodePageMd(true);
+      setTicketOption(false);
+      setPromoBlue(true);
+      setAdmissionBlue(false);
+    };
+
+    if (!sessionStorage.getItem("ticket-info")) {
       console.log("masuk tidak ada data");
       return (
         <div className={`w-full justify-center flex md:h-[658px]`}>
@@ -332,11 +382,9 @@ const ManageTicket = () => {
               </button>
             </div>
           </div>
-
         </div>
       );
     } else {
-      console.log("masuk ada data cuy");
       return (
         <div className={` md:mt-0  md:mx-auto`}>
           <div className="flex flex-col lg:w-[700px] md:w-[530px]">
@@ -353,15 +401,7 @@ const ManageTicket = () => {
                     ? "border-b-4 border-blue-400"
                     : "border-b-4 border-transparent"
                 }`}
-                onClick={() => {
-                  setAdmissionPage(true);
-                  setAdmissionPageMd(true);
-                  setPromCodePage(false);
-                  setPromCodePageMd(false);
-                  setPromoOption(false);
-                  setPromoBlue(false);
-                  setAdmissionBlue(true);
-                }}
+                onClick={onHandleAdmissionTicketLanding}
               >
                 Admission
               </button>
@@ -372,26 +412,31 @@ const ManageTicket = () => {
                     ? "border-b-4 border-blue-400"
                     : "border-b-4 border-transparent"
                 }`}
-                onClick={() => {
-                  setAdmissionPage(false);
-                  setAdmissionPageMd(false);
-                  setPromCodePage(true);
-                  setPromCodePageMd(true);
-                  setTicketOption(false);
-                  setPromoBlue(true);
-                  setAdmissionBlue(false);
-                }}
+                onClick={onHandlePromoTicketLanding}
               >
                 Promo Codes
               </button>
             </div>
           </div>
+          <div>{admissionPageContent()}</div>
+          <div>{promoCodesPageContent()}</div>
         </div>
       );
     }
   };
 
   const admissionPageContent = () => {
+    // useEffect(() => {
+    //   if (sessionStorage.getItem("ticket-info")){
+    //     let getTicket = sessionStorage.getItem("ticket-info")
+    //     setDataTicket(JSON.parse(getTicket))
+    //   };
+    // }, []);
+
+    const onHandleSave = () => {
+      setAdmissionPage(false);
+      setTicketOption(true);
+    };
     return (
       <>
         <div
@@ -402,10 +447,7 @@ const ManageTicket = () => {
           <div className="flex justify-end w-full pr-10 ">
             <button
               className=" bg-black rounded-sm py-2 px-3  text-white hover:bg-slate-700 "
-              onClick={() => {
-                setAdmissionPage(false);
-                setTicketOption(true);
-              }}
+              onClick={onHandleSave}
             >
               Add Ticket
             </button>
@@ -430,41 +472,62 @@ const ManageTicket = () => {
   };
 
   const printDataPromo = () => {
+    console.log("data Promo di print", dataPromo);
     return dataPromo.map((val, idx) => {
-      let newDiscount = ""
-      if(val.discount<100) {
-        newDiscount = `${val.discount}%`
-      } else {
-        newDiscount = "Rp"+" "+val.discount.toLocaleString("id")
-      }
-
+      console.log("masuk persiapan map");
       return (
         <li key={idx} className="flex justify-between py-5 px-1">
-          <div className=" text-ellipsis overflow-hidden w-[120px]">{val.promoName}</div>
-          <div className="w-[77px] overflow-hidden text-ellipsis">{newDiscount}</div>
-          <div className="w-[70px] text-ellipsis overflow-hidden">0/{val.uses}</div>
           <div className=" text-ellipsis overflow-hidden w-[120px]">
-            Applies to
+            {val.promoName}
+          </div>
+          <div className="w-[77px] overflow-hidden text-ellipsis">
+            Rp {parseInt(val.discountAmount).toLocaleString("id")}
+          </div>
+          <div className="w-[70px] text-ellipsis overflow-hidden">
+            0/{val.promoLimit}
+          </div>
+          <div className=" text-ellipsis overflow-hidden w-[120px]">
+            {val.applyTo.join(", ")}
           </div>
           <div className={`button${idx} relative w-[70px] flex text-lg gap-2`}>
-              <button
-                className="rounded-sm bg-white p-2 hover:bg-blue-300 shadow-md"
-                onClick={() => console.log("masuk bang")}
-              >
-                <CiEdit />
-              </button>
-              <button className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 ">
-                <RiDeleteBinLine />
-              </button>
-            </div>
+            <button
+              className="rounded-sm bg-white p-2 hover:bg-blue-300 shadow-md"
+              onClick={() => console.log("masuk bang")}
+            >
+              <CiEdit />
+            </button>
+            <button
+              className="rounded-sm bg-white p-2 shadow-md hover:bg-blue-300 "
+              onClick={() => {
+                let getPromoPrint = sessionStorage.getItem("promo-info");
+                let getPromoPrintParsed = JSON.parse(getPromoPrint);
+                getPromoPrintParsed.splice(idx, 1);
+                let getPromoPrintStringified =
+                  JSON.stringify(getPromoPrintParsed);
+                sessionStorage.setItem("promo-info", getPromoPrintStringified);
+                setDataPromo(getPromoPrintParsed);
+
+                if (sessionStorage.getItem("promo-info").length < 1) {
+                  sessionStorage.removeItem("promo-info");
+                }
+              }}
+            >
+              <RiDeleteBinLine />
+            </button>
+          </div>
         </li>
       );
     });
   };
 
   const promoCodesPageContent = () => {
-    if (!dataPromo) {
-      console.log("masuk data promo null");
+    // useEffect(()=>{
+    //   printDataPromo()
+    // },[promCodePageMd])
+    // useEffect(() => {
+    //   printDataPromo();
+    // }, []);
+    if (!sessionStorage.getItem("promo-info")) {
       return (
         <div
           className={`${promCodePage ? "block" : "hidden"} md:${
@@ -500,9 +563,9 @@ const ManageTicket = () => {
     } else {
       return (
         <div
-          className={` mt-9 flex-col px-2 ${promCodePage ? "flex" : "hidden"} md:${
-            promCodePageMd ? "block" : "hidden"
-          }`}
+          className={` mt-9 flex-col px-2 ${
+            promCodePage ? "flex" : "hidden"
+          } md:${promCodePageMd ? "block" : "hidden"}`}
         >
           <div className="flex justify-end w-full pr-10 ">
             <button
@@ -536,8 +599,86 @@ const ManageTicket = () => {
   };
 
   const addTicketBox = () => {
-        // SETTING untuk storage
-  
+    const onHandleSaveTicketBox = () => {
+      setNewTicketPage(true);
+      setTicketLandingMd(false);
+      setTicketOption(false);
+      setAdmissionPage(true);
+      setAdmissionPageMd(true);
+
+      let ticketInfo = [
+        {
+          ticketFee,
+          ticketName,
+          ticketStock,
+          ticketPrice,
+          ticketSalesStartDate,
+          ticketSalesEndDate,
+          ticketSalesStartHour,
+          ticketSalesEndHour,
+          ticketSalesStart: ticketSalesStartDate + "T" + ticketSalesStartHour,
+          ticketSalesEnd: ticketSalesEndDate + "T" + ticketSalesEndHour,
+        },
+      ];
+
+      if (!sessionStorage.getItem("ticket-info")) {
+        setDataTicket(ticketInfo);
+        console.log("awal data ticket", sessionStorage.getItem("ticket-info"));
+        let dataTicketStringified = JSON.stringify(ticketInfo);
+        sessionStorage.setItem("ticket-info", dataTicketStringified);
+
+        setButtonPaid(false);
+        setButtonFree(false);
+        setTicketFee("");
+        setTicketSalesEndHour("");
+        setTicketSalesStartHour("");
+        setTicketSalesEndDate("");
+        setTicketSalesStartDate("");
+        setTicketName("");
+        setTicketPrice("");
+        setTicketStock("");
+      } else {
+        let getTicket = sessionStorage.getItem("ticket-info");
+        console.log("ini get ticket", getTicket);
+        let addTicketParsed = JSON.parse(getTicket);
+        addTicketParsed.push(...ticketInfo);
+        console.log("ini addticket parsed", addTicketParsed);
+        let addTicketStringified = JSON.stringify(addTicketParsed);
+        console.log("ini addticket setelah di push ", addTicketStringified);
+        sessionStorage.setItem("ticket-info", addTicketStringified);
+        setDataTicket(addTicketParsed);
+
+        setButtonPaid(false);
+        setButtonFree(false);
+        setTicketFee("");
+        setTicketSalesEndHour("");
+        setTicketSalesStartHour("");
+        setTicketSalesEndDate("");
+        setTicketSalesStartDate("");
+        setTicketName("");
+        setTicketPrice("");
+        setTicketStock("");
+      }
+    };
+
+    const onHandleCancelTicketBox = () => {
+      setTicketOption(false);
+      setTicketLanding(true);
+      setAdmissionPage(true);
+
+      // RESTART VALUE
+      setButtonPaid(false);
+      setButtonFree(false);
+      setTicketFee("");
+      setTicketSalesEndHour("");
+      setTicketSalesStartHour("");
+      setTicketSalesEndDate("");
+      setTicketSalesStartDate("");
+      setTicketName("");
+      setTicketPrice("");
+      setTicketStock("");
+    };
+
     return (
       <div
         className={`bg-white block w-[350px] pt-4 h-fit  md:shadow-xl md:flex-col md:right-0 md:w-[400px] md:absolute`}
@@ -560,7 +701,7 @@ const ManageTicket = () => {
               onClick={() => {
                 setButtonPaid(true);
                 setButtonFree(false);
-                setTicketFee("paid")
+                setTicketFee("paid");
               }}
             >
               Paid
@@ -574,7 +715,7 @@ const ManageTicket = () => {
               onClick={() => {
                 setButtonFree(true);
                 setButtonPaid(false);
-                setTicketFee("free")
+                setTicketFee("free");
               }}
             >
               Free
@@ -603,7 +744,7 @@ const ManageTicket = () => {
             </div>
           </div>
 
-          {/* Ticket Quantity */}
+          {/* Ticket Stock */}
           <div className="flex flex-col  mt-4">
             <div className="w-full bg-slate-100  pl-2 rounded-sm shadow-md mx-auto">
               <p className="text-sm pt-1 text-slate-600">
@@ -613,7 +754,9 @@ const ManageTicket = () => {
                 className="ticketName bg-slate-100 focus:outline-none py-1 text-sm "
                 type="number"
                 placeholder="0"
-                onChange={(e) => {setTicketStock(e.target.value)}}
+                onChange={(e) => {
+                  setTicketStock(e.target.value);
+                }}
                 value={ticketStock}
               />
             </div>
@@ -631,7 +774,9 @@ const ManageTicket = () => {
                   className="ticketPrice w-full pr-1 bg-slate-100 focus:outline-none py-1 text-sm "
                   type="number"
                   placeholder="0"
-                  onChange={(e) => {setTicketPrice(e.target.value)}}
+                  onChange={(e) => {
+                    setTicketPrice(e.target.value);
+                  }}
                   value={ticketPrice}
                 />
               </div>
@@ -649,7 +794,9 @@ const ManageTicket = () => {
                     <input
                       type="date"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
-                      onChange={(e)=>{setTicketSalesStartDate(e.target.value)}}
+                      onChange={(e) => {
+                        setTicketSalesStartDate(e.target.value);
+                      }}
                       value={ticketSalesStartDate}
                     />
                   </label>
@@ -660,7 +807,9 @@ const ManageTicket = () => {
                     <input
                       type="date"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
-                      onChange={(e)=>{setTicketSalesEndDate(e.target.value)}}
+                      onChange={(e) => {
+                        setTicketSalesEndDate(e.target.value);
+                      }}
                       value={ticketSalesEndDate}
                     />
                   </label>
@@ -674,7 +823,9 @@ const ManageTicket = () => {
                     <input
                       type="time"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
-                      onChange={(e)=>{setTicketSalesStartHour(e.target.value)}}
+                      onChange={(e) => {
+                        setTicketSalesStartHour(e.target.value);
+                      }}
                       value={ticketSalesStartHour}
                     />
                   </label>
@@ -685,7 +836,9 @@ const ManageTicket = () => {
                     <input
                       type="time"
                       className="bg-slate-200 text-slate-800 focus:outline-none"
-                      onChange={(e)=>{setTicketSalesEndHour(e.target.value)}}
+                      onChange={(e) => {
+                        setTicketSalesEndHour(e.target.value);
+                      }}
                       value={ticketSalesEndHour}
                     />
                   </label>
@@ -699,85 +852,14 @@ const ManageTicket = () => {
             <button
               type="button"
               className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
-              onClick={() => {
-                setTicketOption(false);
-                setTicketLanding(true);
-                
-
-                // RESTART VALUE
-                setButtonPaid(false);
-                setButtonFree(false);
-                setTicketFee("")
-                setTicketSalesEndHour("")
-                setTicketSalesStartHour("")
-                setTicketSalesEndDate("")
-                setTicketSalesStartDate("")
-                setTicketName("")
-                setTicketPrice("")
-                setTicketStock("")
-              }}
+              onClick={onHandleCancelTicketBox}
             >
               Cancel
             </button>
             <button
               type="button"
               className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
-              onClick={() => {
-                setNewTicketPage(true);
-                setTicketLandingMd(false);
-                setTicketOption(false);
-                setAdmissionPage(true);
-                setAdmissionPageMd(true);
-
-                let ticketInfo = {ticketFee,ticketName,ticketStock,ticketPrice,ticketSalesStartDate,ticketSalesEndDate,ticketSalesStartHour,ticketSalesEndHour,ticketSalesStart:new Date(ticketSalesStartDate+"T"+ticketSalesStartHour), ticketSalesEnd:new Date(ticketSalesEndDate+"T"+ticketSalesEndHour)}
-                
-                setDataTicket(current=>[...current,{...ticketInfo}])
-                console.log("ini data ticket", dataTicket);
-                const dataTicketStringified = JSON.stringify(...dataTicket)
-                console.log("ini data ticket stringified", dataTicketStringified);
-
-                if(sessionStorage.getItem("ticketInfo")){
-                  console.log("masuk nambah ticket");
-                  sessionStorage.setItem("ticketInfo",dataTicketStringified)
-                  let addTicket = sessionStorage.getItem("ticketInfo")
-                  let addTicketParsed = JSON.parse(addTicket)
-                  console.log("ini add ticket parsed",addTicketParsed);
-                  setDataTicket(current=>[...current,{...addTicketParsed}])
-                  console.log("sudah di set datanya");
-
-                  setButtonPaid(false);
-                setButtonFree(false);
-                setTicketFee("")
-                setTicketSalesEndHour("")
-                setTicketSalesStartHour("")
-                setTicketSalesEndDate("")
-                setTicketSalesStartDate("")
-                setTicketName("")
-                setTicketPrice("")
-                setTicketStock("")
-                } else {
-                  console.log("masuk add ticket tanpa ada data");
-                  sessionStorage.setItem("ticketInfo",dataTicketStringified)
-                  let addTicket = sessionStorage.getItem("ticketInfo")
-                  console.log("ini data tiket 1", addTicket);
-                  let addTicketParsed = JSON.parse(addTicket)
-                  console.log("ini data tiket cuy", addTicketParsed);
-                  setDataTicket([addTicketParsed])
-
-                  setButtonPaid(false);
-                setButtonFree(false);
-                setTicketFee("")
-                setTicketSalesEndHour("")
-                setTicketSalesStartHour("")
-                setTicketSalesEndDate("")
-                setTicketSalesStartDate("")
-                setTicketName("")
-                setTicketPrice("")
-                setTicketStock("")
-                  }
-
-                
-              }}
+              onClick={onHandleSaveTicketBox}
             >
               Save
             </button>
@@ -812,6 +894,7 @@ const ManageTicket = () => {
                   setCountMax2(e.target.value.length);
                   setPromoName(e.target.value);
                 }}
+                value={promoName}
               />
             </div>
             <div className="w-full mx-auto text-xs text-right mt-1">
@@ -830,7 +913,10 @@ const ManageTicket = () => {
                 className="bg-slate-100 focus:outline-none py-1 text-sm "
                 type="number"
                 placeholder="0"
-                onChange={(e) => {}}
+                onChange={(e) => {
+                  setPromoLimit(e.target.value);
+                }}
+                value={promoLimit}
               />
             </div>
           </div>
@@ -842,21 +928,14 @@ const ManageTicket = () => {
               <div className="pl-2 shadow-md flex items-center gap-3 h-[50px] w-[170px] bg-slate-100 ">
                 <span className=" font-bold text-sm">Rp</span>
                 <input
-                  className="discountByNom w-full pr-1 bg-slate-100 focus:outline-none py-1 text-sm "
+                  className="discountBy w-full pr-1 bg-slate-100 focus:outline-none py-1 text-sm "
                   type="number"
                   placeholder="0"
-                  onChange={(e) => {}}
+                  onChange={(e) => {
+                    setDiscountAmount(e.target.value);
+                  }}
+                  value={discountAmount}
                 />
-              </div>
-              <div className="my-auto text-center font-bold text-md">or</div>
-              <div className=" pl-2 shadow-md flex items-center gap-3 h-[50px] w-[170px] bg-slate-100 pr-2">
-                <input
-                  className="discountByPercent w-full pr-1 bg-slate-100 focus:outline-none py-1 text-sm "
-                  type="number"
-                  placeholder="0"
-                  onChange={(e) => {}}
-                />
-                <span className=" font-bold text-sm">%</span>
               </div>
             </div>
           </div>
@@ -865,14 +944,31 @@ const ManageTicket = () => {
           <div className="mt-9 gap-y-2 flex flex-col md:pr-2">
             <p>Apply your discount to :</p>
             <div>
-              <input type="radio" name="applyDiscount" id="" /> All Visible
-              Ticket
+              <input
+                type="radio"
+                name="applyDiscount"
+                id=""
+                value={applyTo}
+                onChange={() => {
+                  let allTicket = [];
+                  allTicket = dataTicket.map((val, idx) => {
+                    return val.ticketName;
+                  });
+                  setApplyTo(allTicket);
+                }}
+              />{" "}
+              All Visible Ticket
               <br />
             </div>
             <div className="flex gap-1 justify-between">
               <div>
-                <input type="radio" name="applyDiscount" id="" /> Only certain
-                visible ticket
+                <input
+                  type="radio"
+                  name="applyDiscount"
+                  id=""
+                  value={applyTo}
+                />{" "}
+                Only certain visible ticket
               </div>
               <span
                 className=" text-slate-600 cursor-pointer hover:text-blue-600"
@@ -891,6 +987,15 @@ const ManageTicket = () => {
               onClick={() => {
                 setPromCodePage(true);
                 setPromoOption(false);
+
+                setPromoName("");
+                setPromoLimit("");
+                setDiscountAmount("");
+                setApplyTo(
+                  (document.querySelector(
+                    'input[name="applyDiscount"]:checked'
+                  ).checked = false)
+                );
               }}
             >
               Cancel
@@ -900,7 +1005,49 @@ const ManageTicket = () => {
               className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
               onClick={() => {
                 setNewPromPage(true);
+                setPromCodePage(true);
                 setPromoOption(false);
+
+                let promoInfo = [
+                  {
+                    promoName,
+                    promoLimit,
+                    discountAmount,
+                    applyTo,
+                  },
+                ];
+
+                if (!sessionStorage.getItem("promo-info")) {
+                  setDataPromo(promoInfo);
+                  console.log("dataPromo nih", dataPromo);
+                  let dataPromoStringified = JSON.stringify(promoInfo);
+                  sessionStorage.setItem("promo-info", dataPromoStringified);
+
+                  setPromoName("");
+                  setPromoLimit("");
+                  setDiscountAmount("");
+                  setApplyTo(
+                    (document.querySelector(
+                      'input[name="applyDiscount"]:checked'
+                    ).checked = false)
+                  );
+                } else {
+                  let getPromo = sessionStorage.getItem("promo-info");
+                  let addPromoParsed = JSON.parse(getPromo);
+                  addPromoParsed.push(...promoInfo);
+                  let addPromoStringified = JSON.stringify(addPromoParsed);
+                  sessionStorage.setItem("promo-info", addPromoStringified);
+                  setDataPromo(addPromoParsed);
+
+                  setPromoName("");
+                  setPromoLimit("");
+                  setDiscountAmount("");
+                  setApplyTo(
+                    (document.querySelector(
+                      'input[name="applyDiscount"]:checked'
+                    ).checked = false)
+                  );
+                }
               }}
             >
               Save
@@ -932,7 +1079,17 @@ const ManageTicket = () => {
             </button>
             <button
               className="hover:text-blue-600 active:text-blue-800"
-              onClick={() => setToggleModal(false)}
+              onClick={() => {
+                setToggleModal(false);
+                let checkedTicket = [];
+                let checkedBox = document.getElementsByName("applyDiscountTo");
+                for (let i = 0; i < checkedBox.length; i++) {
+                  if (checkedBox[i].checked) {
+                    checkedTicket.push(checkedBox[i].value);
+                  }
+                }
+                setApplyTo(checkedTicket);
+              }}
             >
               Done
             </button>
@@ -942,18 +1099,27 @@ const ManageTicket = () => {
     );
   };
 
-  React.useEffect(()=>{
-    
-  })
-  {ScrollToTop()}
+  React.useEffect(() => {});
+  {
+    ScrollToTop();
+  }
   return (
     <LayoutPromotor>
       <div className="flex flex-col  md:flex-row ">
-        <PromotorSubSideBar page="Tickets" eventTitle={eventBasic_infoParsed.eventTitle} day={eventStart.getDay()} month={eventStart.getMonth()} date={eventStart.getDate()} year={eventStart.getFullYear()} start_hour={eventBasic_infoParsed.eventStartHour} />
+        <PromotorSubSideBar
+          page="Tickets"
+          eventTitle={eventBasic_infoParsed.eventTitle}
+          day={eventStart.getDay()}
+          month={eventStart.getMonth()}
+          date={eventStart.getDate()}
+          year={eventStart.getFullYear()}
+          start_hour={eventBasic_infoParsed.eventStartHour}
+          end_hour={eventBasic_infoParsed.eventEndHour}
+        />
         <div className=" md:flex md:flex-col md:ml-[250px] lg:ml-[300px]">
           {printTicketLanding()}
-          <div className="">{admissionPageContent()}</div>
-          <div className="">{promoCodesPageContent()}</div>
+          {/* <div className="">{admissionPageContent()}</div>
+          <div className="">{promoCodesPageContent()}</div> */}
         </div>
 
         {/* PAGE untuk PROMO CODES jika tidak ada kode promo */}

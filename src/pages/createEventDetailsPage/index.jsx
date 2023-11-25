@@ -36,7 +36,7 @@ const CreateEventDetails = () => {
   {ScrollToTop()}
   return (
     <LayoutPromotor>
-      <PromotorSubSideBar page="Details" eventTitle={eventBasic_infoParsed.eventTitle} day={eventStart.getDay()} month={eventStart.getMonth()} date={eventStart.getDate()} year={eventStart.getFullYear()} start_hour={eventBasic_infoParsed.eventStartHour} />
+      <PromotorSubSideBar page="Details" eventTitle={eventBasic_infoParsed.eventTitle} day={eventStart.getDay()} month={eventStart.getMonth()} date={eventStart.getDate()} year={eventStart.getFullYear()} start_hour={eventBasic_infoParsed.eventStartHour} end_hour={eventBasic_infoParsed.eventEndHour} />
       <div className="w-full pb-7 pl-5 pr-10 md:w-[500px] md:mx-auto lg:w-[600px]">
         {/* Maint Event Image */}
         <form action="" className=" md:ml-14">
