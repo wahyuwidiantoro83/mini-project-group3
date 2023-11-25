@@ -193,7 +193,6 @@ const Register = () => {
           </form>
         </div>
       </div>
-      {/* {showModal && <Modal onClose={() => dispatch(closeModal())} />} */}
     </div>
   );
 };

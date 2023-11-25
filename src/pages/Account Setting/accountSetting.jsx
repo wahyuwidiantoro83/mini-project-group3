@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import axios from "axios";
 import COVER_IMAGE from "../../assets/COVER_IMAGE.png";
+import Navbar from '../../components/Navbar';
 
 // --------------------- Account settings by=audra ----------------------------------
 
@@ -10,6 +11,7 @@ const AccountSettings = () => {
 
   return (
     <div>
+      <Navbar>
       <div className="flex flex-row bg-red-500">
         <div className="flex flex-col bg-clip-border rounded-xl bg-blue-400 text-gray-700 w-full h-scren max-w-[20rem] p-4 shadow-blue-gray-800">
           <nav className="flex flex-col gap-1 min-w-[240px] bg-yellow-500 p-2 font-sans text-base font-normal text-gray-700">
@@ -159,6 +161,7 @@ const AccountSettings = () => {
           <form></form>
         </div>
       </div>
+      </Navbar>
     </div>
   )
 };
