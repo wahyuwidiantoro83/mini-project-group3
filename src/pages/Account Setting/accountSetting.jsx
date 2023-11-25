@@ -36,8 +36,8 @@ const AccountSettings = () => {
             </div>
             Profile
           </button>
-          <div 
-          role="button"
+          <button 
+          type="button"
           tabIndex="0"
           className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
             <div className="grid place-items-center mr-4 bg-green-500">
@@ -58,9 +58,9 @@ const AccountSettings = () => {
                 </svg>
             </div>
             Settings
-          </div>
-          <div 
-          role="button"
+          </button>
+          <button
+          type="button"
           tabIndex="0"
           className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
           >
@@ -81,7 +81,7 @@ const AccountSettings = () => {
               </svg>
             </div>
             Log Out 
-          </div>
+          </button>
           </nav>
         </div>
         <div className="flex w-full h-screen max-w-[20rem] p-4"></div>
@@ -100,10 +100,63 @@ const AccountSettings = () => {
             </div>
             <div className="w-48">
               <div className="flex justify-center content-center items-center h-48 w-48 border-2 border-purple-500">
-                 
+                 <form>
+                  <label 
+                  htmlFor="picUpload"
+                  className="focus:outline-1"
+
+                  >
+                    {/* {profilePicGlobal && !profilePicGlobal.includes("null") ? ( */}
+                    <div className='w-44 h-44 cursor-pointer'>
+                      <img src="" className='w-full h-full object-contain' />
+                      <input 
+                      id="picUpload"
+                      type="file" 
+                      name="picUpload"
+                      // onChange={}
+                      accept='image/*'
+                      className="opacity-0 -z-10 absolute"
+                      />
+                    </div>
+                    {/* ):(  */}
+                      <div className='flex flex-col items-center h-44 w-44 border border-dashed border-slate-300 cursor-pointer'>
+                        {/* <BsPersonFill size={"100px"} /> */}
+                        <p>
+                          ADD A PROFILE
+                          <span className=" flex justify-center">IMAGE</span>
+                        </p>
+                        <p className=" text-xs">click to upload photo</p>
+                        <input
+                          id="picUpload"
+                          name="picUpload"
+                          // onChange={(e) => profilePhotoSave(e)}
+                          type="file"
+                          accept="image/*"
+                          className=" opacity-0 -z-10 absolute"
+                        />
+                      </div>
+                    {/* )} */}
+                  </label>
+                 </form>
+              </div>
+              <div className='flex gap-x-3 justify-between my-1'>
+                <p className="text-xs">Click picture to change</p>
+                <a 
+                className="text-ts flex text-blue-600 hover:cursor-pointer hover:underline"
+                // onClick={}
+                >
+                  Remove
+                </a>
               </div>
             </div>
           </div>
+          <div className='flex justify-between'>
+            <h1 className='text-xl font-bold'>Account Information</h1>
+          </div>
+          <div>
+            <div className='w-full h-[1px] my-4 bg-brown-500 mx-auto'></div>
+          </div>
+          <form></form>
         </div>
       </div>
     </div>
