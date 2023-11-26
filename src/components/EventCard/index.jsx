@@ -24,7 +24,9 @@ const EventCard = (props) => {
             })}
           </span>
           <span className=" text-sm max-w-[90%] text-gray-500 line-clamp-1">
-            {props.data.address}, {props.data.city.city}
+            {props.data.city.city === "Online"
+              ? "Online"
+              : `${props.data.address}, ${props.data.city.city}`}
           </span>
           <span className="text-sm font-bold text-gray-500">
             {props.data.tickets[0].start_at === 0

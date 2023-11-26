@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
-import { data } from "../Landing/data";
 import {
   HiOutlineShare,
   HiOutlineHeart,
@@ -10,10 +9,27 @@ import {
   HiOutlineMinus,
   HiOutlinePlus,
 } from "react-icons/hi2";
+import { useEffect, useState } from "react";
+import API_CALL from "../../helper/api_backend";
+import { useDispatch, useSelector } from "react-redux";
 
 const DetailEvent = (props) => {
-  const param = useParams();
-  const dataDetail = [...data].filter((value) => value.id === parseInt(param.id))[0];
+  const [detailData, setDetailData] = useState("");
+  const params = useParams();
+
+  const getDetailEvent = async () => {
+    try {
+      const result = await API_CALL.get(`/event/detail/${params.id}`);
+      return setDetailData(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDetailEvent();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -21,14 +37,24 @@ const DetailEvent = (props) => {
         <div className="content-detail flex flex-col px-4 py-2 md:px-24 md:py-6 lg:px-44 lg:py-12 gap-6">
           <div className="main-banner w-full md:h-[460px] border-2 rounded-3xl overflow-hidden shadow-sm relative">
             <div className="hidden lg:block w-full h-full">
-              <img className="w-full h-full object-fill blur-lg" src={dataDetail.picture} alt="" />
+              <img
+                className="w-full h-full object-fill blur-lg"
+                src={`http://localhost:2066/public/event/${detailData.image}`}
+                alt=""
+              />
             </div>
             <div className="aspect-video h-full md:absolute md:top-0 md:left-1/2 md:transform md:-translate-x-1/2">
-              <img className="w-full h-full object-fill" src={dataDetail.picture} alt="" />
+              <img
+                className="w-full h-full object-fill"
+                src={`http://localhost:2066/public/event/${detailData.image}`}
+                alt=""
+              />
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <span className="font-medium text-lg text-gray-500">{dataDetail.date}</span>
+            <span className="font-medium text-lg text-gray-500">
+              {new Date(detailData.startDate).toLocaleDateString("en-uk", { dateStyle: "full" })}
+            </span>
             <div className="flex gap-2">
               <span className="w-10 h-10 p-2 hover:bg-slate-100 transition-all duration-200 rounded-full">
                 <HiOutlineHeart size={"100%"} />
@@ -41,7 +67,7 @@ const DetailEvent = (props) => {
           <div className="flex flex-col lg:flex-row justify-between">
             <div className="flex flex-col h-fit w-full lg:w-[60%] gap-10">
               <span className=" text-2xl md:text-4xl lg:text-5xl font-extrabold">
-                {dataDetail.title}
+                {detailData.name}
               </span>
               <div className="flex items-center w-full bg-gray-100 rounded-md  p-4 justify-between">
                 <div className="flex items-center gap-4">
@@ -52,7 +78,7 @@ const DetailEvent = (props) => {
                       alt=""
                     />
                   </div>
-                  <span className="font-bold">By {dataDetail.promotor}</span>
+                  <span className="font-bold">By {detailData?.auth?.accountDetail?.name}</span>
                 </div>
                 <button
                   className=" bg-gray-800 py-3 px-6 md:px-10 lg:px-12 rounded-md text-sm text-white"
@@ -68,7 +94,24 @@ const DetailEvent = (props) => {
                     <HiOutlineCalendar size={"100%"} />
                   </span>
                   <span className="text-gray-500 max-sm:text-sm">
-                    {dataDetail.date}, {dataDetail.startHour} - {dataDetail.endHour}
+                    {detailData.startDate === detailData.endDate
+                      ? `${new Date(
+                          detailData.startDate + " " + detailData.startHour
+                        ).toLocaleString("en-us", {
+                          dateStyle: "full",
+                          timeStyle: "short",
+                        })} - ${new Date(
+                          "2000-10-10" + " " + detailData.endHour
+                        ).toLocaleTimeString("en-us", { timeStyle: "short" })}`
+                      : `${new Date(
+                          detailData.startDate + " " + detailData.startHour
+                        ).toLocaleString("en-us", { dateStyle: "medium" })} - ${new Date(
+                          detailData.endDate + " " + detailData.endHour
+                        ).toLocaleString("en-us", { dateStyle: "medium" })}, ${new Date(
+                          "2000-10-10" + " " + detailData.startHour
+                        ).toLocaleTimeString("en-us", { timeStyle: "short" })} - ${new Date(
+                          "2000-10-10" + " " + detailData.endHour
+                        ).toLocaleTimeString("en-us", { timeStyle: "short" })}`}
                   </span>
                 </div>
               </div>
@@ -78,39 +121,26 @@ const DetailEvent = (props) => {
                   <span className="w-10 h-10 p-2">
                     <HiOutlineMapPin size={"100%"} />
                   </span>
-                  <span className="text-gray-500 max-sm:text-sm">{dataDetail.location}</span>
+                  <span className="text-gray-500 max-sm:text-sm">
+                    {detailData?.city?.city?.toLowerCase() === "online"
+                      ? `Online`
+                      : `${detailData?.city?.city}, ${detailData.address}`}
+                  </span>
                 </div>
               </div>
               <div className="flex flex-col gap-4">
                 <span className="text-xl md:text-2xl font-bold">About this event</span>
-                <p className="text-gray-500 max-sm:text-sm">{dataDetail.detail}</p>
-              </div>
-              <div className="flex flex-col gap-4" id="ticket-lists">
-                <span className="text-xl md:text-2xl font-bold">Available tickets</span>
-                <div className="ticket-item flex flex-col border-2 rounded-xl p-4 gap-3 bg-slate-200">
-                  <span className="text-xl font-medium text-gray-800">Event - Reguler</span>
-                  <span className="text-sm text-gray-500">Sales ends in 29 Oktober 2023</span>
-                  <hr class="h-px border-0 bg-slate-700" />
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-semibold">Rp. 50.000,00</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <span className="w-10 h-10 p-2 hover:bg-slate-100 transition-all duration-200 rounded-full">
-                        <HiOutlineMinus size={"100%"} />
-                      </span>
-                      <span className="font-semibold">0</span>
-                      <span className="w-10 h-10 p-2 hover:bg-slate-100 transition-all duration-200 rounded-full">
-                        <HiOutlinePlus size={"100%"} />
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                <p className="text-gray-500 max-sm:text-sm">{detailData.description}</p>
               </div>
             </div>
             <div className="sticky max-lg:bottom-0 max-lg:bg-white lg:flex w-full lg:w-[30%] lg:relative shadow-sm">
               <div className="sticky flex flex-col items-center top-20 w-full h-fit border rounded-lg shadow-sm p-4">
-                <span className="block p-6 text-lg">{dataDetail.price}</span>
+                <span className="block p-6 text-lg">
+                  {"Start At "}
+                  {detailData?.tickets
+                    ?.sort((a, b) => a.price - b.price)[0]
+                    .price.toLocaleString("id", { style: "currency", currency: "idr" })}
+                </span>
                 <a className="w-full" href="#ticket-lists">
                   <button className="bg-gray-800 py-3 px-12 w-full rounded-md text-sm text-white">
                     Get Ticket

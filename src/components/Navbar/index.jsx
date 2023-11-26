@@ -10,9 +10,11 @@ import {
   HiUser,
 } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const located = useSelector((state) => state.locationReducer.city);
   const url = useLocation();
   console.log(url.pathname.includes("find-event"));
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const Navbar = (props) => {
                 url.pathname.includes("find-event") ? "" : "md:flex"
               } items-center gap-2 rounded-full px-4 py-3 border-2 border-gray-200  bg-gray-100 cursor-pointer`}
               onClick={() => {
-                navigate(`/find-event/${props.currLocation}/sr`);
+                navigate(`/find-event/${located}`);
               }}
             >
               <HiMagnifyingGlass size={"16px"} />
