@@ -6,32 +6,29 @@ import { AiOutlineCloudUpload, AiOutlineFileImage } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import Footer from "../../components/Footer";
 import ScrollToTop from "../../hooks/scrollToTop";
+import axios from "axios";
+import { API_URL } from "../../helper";
 
 const CreateEventDetails = () => {
   const navigate = useNavigate();
   const [media, setMedia] = React.useState(null);
   const [fileName, setFileName] = React.useState("No selected file");
   const [eventDesc, setEventDesc]=React.useState("")
-  // const [dayName, setDayName] = React.useState(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday"])
-  // const [monthName, setMonthName] = React.useState([
-    // "Jan",
-    // "Feb",
-    // "Mar",
-    // "Apr",
-    // "Mei",
-    // "Jun",
-    // "Jul",
-    // "Agt",
-    // "Sep",
-    // "Oct",
-    // "Nov",
-    // "Dec",
-  // ]);
+  const [imageFile,setImageFile]=React.useState("")
+  const [openModal, setOpenModal]=React.useState(false)
 
   const eventBasic_info = sessionStorage.getItem("basic_info")
   const eventBasic_infoParsed = JSON.parse(eventBasic_info)
   const eventStart = new Date (eventBasic_infoParsed.eventDateStart)
 
+  const modalBox = ()=>{
+    document.body.style.overflow="hidden"
+    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+      <div className="bg-white w-[350px] rounded-sm py-4 px-4">
+
+      </div>
+    </div>
+  }
 
   {ScrollToTop()}
   return (
@@ -55,10 +52,14 @@ const CreateEventDetails = () => {
               }}
             >
               <input
+              id="file"
                 type="file"
                 accept="image/*"
                 className="inputImage hidden bg-slate-200]"
                 onChange={({ target: { files } }) => {
+                  console.log("ini files dalam gambar",files);
+                  setImageFile(files[0])
+                  console.log("ini image file", imageFile);
                   files[0] && setFileName(files[0].name);
                   if (files) {
                     setMedia(URL.createObjectURL(files[0]));
@@ -112,6 +113,7 @@ const CreateEventDetails = () => {
         <button
           type="button"
           className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
+          onClick={()=>{setOpenModal(true)}}
         >
           Discard
         </button>
@@ -119,14 +121,30 @@ const CreateEventDetails = () => {
           type="button"
           className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
           onClick={() => {
+            
+              // setting axios untuk post image
+            const file = document.querySelector("#file")
+            console.log("ini image file", imageFile);
+            const formData = new FormData();
+            formData.append("fileUpload",imageFile)
+            console.log("ini formdata",formData);
+             API_URL.post("/create/event",formData).then((res)=>{
+              console.log(res);
+             })
+
             const resultDetails = {fileName,eventDesc}
             const resultDetailsStringified = JSON.stringify(resultDetails)
             sessionStorage.setItem("details", resultDetailsStringified)
             navigate("/manage/ticket")
+           
+            
           }}
         >
           Save & Continue
         </button>
+      </div>
+      <div className={`${openModal ? "visible " : "invisible"}`}>
+          {modalBox()}
       </div>
       <Footer />
     </LayoutPromotor>
