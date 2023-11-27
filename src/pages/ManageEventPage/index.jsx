@@ -12,20 +12,7 @@ const ManageEvent = () => {
   const navigate = useNavigate()
     const [showOption,setShowOption] = React.useState(false) 
   const [myEvent, setMyEvent] = React.useState([
-    {
-      name: "Event1",
-      category: "food",
-      date: "01/August/2022",
-      sold: "",
-      status: "",
-    },
-    {
-        name: "Event2",
-        category: "education",
-        date: "11/August/2022",
-        sold: "",
-        status: "",
-      },
+   
   ]);
 
   const printMyEvent = () => {
@@ -75,6 +62,9 @@ const ManageEvent = () => {
         setPromotorName(response.data.result.name)
 
         const getEvent = await API_URL.get("/manage-event",{headers:{Authorization: `Bearer ${getToken}`}})
+        console.log("ini get event FE",getEvent.data.result);
+        setMyEvent(getEvent.data.result)
+
       } catch (error) {
         console.log("Error get data", error);
       }
@@ -90,7 +80,7 @@ const ManageEvent = () => {
           <button
             type="button"
             className="mt-16 p-4 rounded-lg font-bold text-white bg-black hover:bg-slate-800"
-            onClick={()=>navigate("/create/event")}
+            onClick={()=>navigate("/promotor/create-event")}
           >
             Create Your Event!
           </button>
@@ -119,6 +109,11 @@ const ManageEvent = () => {
           </thead>
           <tbody>{printMyEvent()}</tbody>
         </table>
+          <ul>
+            <li className="bg-yellow-200">
+              <div>hai</div>
+            </li>
+          </ul>
       </div>
       <Footer/>
     </LayoutPromotor>

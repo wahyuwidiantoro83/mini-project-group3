@@ -2,20 +2,22 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineDown } from "react-icons/ai";
 import { BsGlobe2 } from "react-icons/bs";
 import LayoutPromotor from "../../components/PromotorLayout";
-import React from "react";
+import React, { useEffect } from "react";
 import { CiGlobe } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
 import Footer from "../../components/Footer";
 import ScrollToTop from "../../hooks/scrollToTop";
+import { API_URL } from "../../helper";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
+  const [promotorName,setPromotorName]= React.useState("");
   const [countMax, setCountMax] = React.useState(0);
   const [eventTitle, setEventTitle] = React.useState("");
   const [showType, setShowType] = React.useState(false);
   const [eventType, setEventType] = React.useState("Type");
   const [showType2, setShowType2] = React.useState(false);
-  const [eventCategory, setEventCategory] = React.useState("Category");
+  const [eventCategory, setEventCategory] = React.useState([]);
   const [eventCategoryId, setEventCategoryId] = React.useState(0);
   const [eventAddress,setEventAddress]=React.useState("");
   const [eventCity,setEventCity]=React.useState("");
@@ -43,9 +45,28 @@ const CreateEvent = () => {
     </div>
   }
 
+  const printDataCategory = () =>{
+   
+  }
+
+  useEffect(()=>{
+    const getDataEvent = async ()=>{
+      const getToken = localStorage.getItem("token")
+      try {
+        const response = await API_URL.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
+        setPromotorName(response.data.result.name)
+
+
+      } catch (error) {
+        console.log("Error get data", error);
+      }
+    }
+    getDataEvent()
+  },[])
+
   {ScrollToTop()}
   return (
-    <LayoutPromotor>
+    <LayoutPromotor accountName={promotorName}>
       <div className="">
         <div className="pl-5 pr-10 md:w-[450px] md:mx-auto lg:w-[600px] pb-7">
           <div
