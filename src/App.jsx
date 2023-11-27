@@ -15,26 +15,25 @@ import PageNotFound from "./pages/PageNotFound";
 function App() {
   return (
     <>
-
       <Routes>
         <Route path="/dummy-login" element={<LoginDummy />} />
-      {/* PROMOTOR ROUTER */}
+        {/* PROMOTOR ROUTER */}
         <Route path="/promotor" element={<PromotorLandingPage />} />
         <Route path="/promotor/manage-event" element={<ManageEvent />} />
         <Route path="/promotor/manage-ticket" element={<ManageTicket />} />
         <Route path="/promotor/create-event" element={<CreateEvent />} />
         <Route path="/promotor/create-event-details" element={<CreateEventDetails />} />
         <Route path="/promotor/publish" element={<PublishPage />} />
-              
-        
-        <Route path="/explore" />
+
         <Route path="/" element={<Landing />} />
         <Route path="/find-event/:loc" element={<FindEvent />} />
         <Route path="/find-event/:loc/:search" element={<FindEvent />} />
         <Route path="/event/detail/:id" element={<DetailEvent />} />
         <Route path="/*" element={<PageNotFound />} />
         <Route path="/find-event" element={<FindEvent />} />
-</Routes>
-</>)}
+      </Routes>
+    </>
+  );
+}
 
 export default App;
