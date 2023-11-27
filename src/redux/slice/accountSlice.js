@@ -20,9 +20,6 @@ const accountSlice = createSlice({
       state.role = action.payload.role;
       state.showModal = true;
     },
-    closeModal: (state) => {
-      state.showModal = false;
-    },
     logout: (state, action) => {
       state.username = "";
       state.email = "";

@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const showModal = useSelector((state) => state.account.showModal);
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -81,7 +80,7 @@ const Register = () => {
  console.log(values);
     try {
       
-      const response = await axios.post("http://localhost:2023/auth/regis", values);
+      const response = await axios.post(API_URL + `/auth/regis`, values);
   
       console.log("INI RESPONSE", response);
       console.log("Form input values", values);

@@ -1,8 +1,28 @@
 import React from "react";
+import { useState } from "react";
 import COVER_IMAGE from "../../../assets/COVER_IMAGE.png";
 import GOOGLE_ICON from "../../../assets/GOOGLE_ICON.svg";
+import { useDispatch } from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
+import { axiosInstance } from "../../../config";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axiosInstance
+  //   } catch (error) {
+      
+  //   }
+  // }
+
   return (
     <div className=" w-full h-screen flex flex-col sm:flex-row items-start">
       <div className="relative w-full sm:w-1/2 sm:h-full flex flex-col">
@@ -45,15 +65,19 @@ const Login = () => {
                     <input type="checkbox" className="w-4 h-4 mr-2" />
                     <p className="text-sm">Remember Me</p>
                     </div>
-                    <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">Forget Password ?</p>
+                    <Link 
+                    to={"/forget"}
+                    className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">Forget Password ?</Link>
                 </div>
                 <div className="w-full flex flex-col my-4">
                     <button className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
                         Log in
                     </button>
-                    <button className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
+                    < Link 
+                    to={"/register"}
+                    className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
                         Register
-                    </button>
+                    </Link>
                 </div>
 
                 <div className="w-full flex item-center justify-center relative py-2">

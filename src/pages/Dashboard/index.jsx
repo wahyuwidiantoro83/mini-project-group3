@@ -1,36 +1,67 @@
-import React from 'react';
-import { useState } from "react";
-import axios from "axios";
-import COVER_IMAGE from "../../assets/COVER_IMAGE.png";
-import Navbar from '../../components/Navbar';
-import FormPut from '../../components/Form/FormPut';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import Navbar from '../../components/Navbar'; 
 
-// --------------------- Account settings by=audra ----------------------------------
+const Dashboard = () => {
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    password: '',
+    countryCode: '',
+    phone: '',
+    birth_date: '',
+    address: '',
+    document: null,
+    bank_acc: '',
+  });
+  const [selectedOption, setSelectedOption] = useState('');
 
-const AccountSettings = () => {
-  const navigate = useNavigate();
-  const accountGlobal = useSelector((state) => state.accountSliceReducer);
-  
+  const countryCodes = [
+    { code: "+1", name: "United States" },
+    { code: "+44", name: "United Kingdom" },
+    { code: "+62", name: "Indonesia" },
+  ];
+
+  const handleProfilePhotoChange = (event) => {
+    const file = event.target.files[0];
+    setProfilePhoto(URL.createObjectURL(file));
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault
+  }
 
   return (
     <div>
-      <Navbar/>
-      <div className="flex flex-row bg-gradient-to-r from-black to-white">
-        <div className="flex flex-col bg-clip-border rounded-xl bg-blue-400 text-gray-700 w-full h-scren max-w-[20rem] p-4 shadow-blue-gray-800">
-          <nav className="flex flex-col gap-1 min-w-[240px] bg-gradient-to-r from-white to-black p-2 font-sans text-base font-normal text-gray-700">
+      <Navbar />
+      <div className="flex flex-row h-content bg-gray-100
+      ">
+        {/* Sidebar */}
+        <div className="flex flex-col bg-clip-border bg-white text-gray-700 w-full h-content max-w-[20rem] p-4 shadow-blue-gray-800">
+          <nav className="flex flex-col gap-1 min-w-[240px] bg-white p-2 font-sans text-base font-normal text-gray-700">
           <button
           type="button"
           tabIndex="0" 
-          className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
+          className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-200 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-blue-200 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
             <div className="grid place-itms-center mr-4 bg-gradient-to-r from-green-500 to-blue-500">
                 <svg 
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden="true"
-                className="h-5 w-5"
+                className="h-5 w-5 bg-white"
                 >
                   <path 
                   fillRule="evenodd"
@@ -46,14 +77,14 @@ const AccountSettings = () => {
           <button 
           type="button"
           tabIndex="0"
-          className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
+          className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-200 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-blue-200 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
             <div className="grid place-items-center mr-4 bg-gradient-to-r from-green-500 to-blue-500">
                 <svg 
                  xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 24 24"
                  fill="currentColor"
                  aria-hidden="true"
-                 className="h-5 w-5"
+                 className="h-5 w-5 bg-white"
                 >
                   <path 
                    fillRule="evenodd"
@@ -69,7 +100,7 @@ const AccountSettings = () => {
           <button
           type="button"
           tabIndex="0"
-          className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
+          className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-200 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-blue-200 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
           >
             <div className="grid place-items-center mr-4 bg-gradient-to-r from-green-500 to-blue-500">
               <svg 
@@ -77,7 +108,7 @@ const AccountSettings = () => {
               viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
-              className="h-5 w-5 bg-green-500"
+              className="h-5 w-5 bg-white"
               >
                  <path
                  fillRule="evenodd"
@@ -91,101 +122,85 @@ const AccountSettings = () => {
           </button>
           </nav>
         </div>
-        <div className="flex w-full h-screen max-w-[20rem] p-4"></div>
-        <div className="px-4">
-          <div className="flex flex-row-reverse py-3 w-full mx-auto">
-            <p className="text-sm">
-              eventbright
-            </p>
+      {/* Main content */}
+        <div className="w-3/4 p-4">
+          {/* Profile photo preview */}
+          <div className="mb-4">
+            <img
+              src={profilePhoto || 'placeholder.jpg'}
+              alt="Profile Photo"
+              className="w-32 h-32 rounded-full object-cover"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePhotoChange}
+            />
           </div>
-          <div>
-            <div className="flex justify-between">
-              <h1 className="text-xl font-bold">Profile Photo</h1>
-            </div>
-            <div>
-              <div className="w-full h-[1px] my-4 bg-gradient-to-r from-white to-black mx-auto"></div>
-            </div>
-            <div className="w-48">
-              <div className="flex justify-center content-center items-center h-48 w-48 border-2 border-gradient-to-r from-white to-black">
-                 <form>
-                  <label 
-                  htmlFor="picUpload"
-                  className="focus:outline-1"
 
-                  >
-                    {/* {profilePicGlobal && !profilePicGlobal.includes("null") ? ( */}
-                    <div className='w-44 h-44 cursor-pointer'>
-                      <img src="" className='w-full h-full object-contain' />
-                      <input 
-                      id="picUpload"
-                      type="file" 
-                      name="picUpload"
-                      // onChange={}
-                      accept='image/*'
-                      className="opacity-0 -z-10 absolute"
-                      />
-                    </div>
-                    {/* ):(  */}
-                      <div className='flex flex-col items-center h-44 w-44 border border-dashed border-slate-300 cursor-pointer'>
-                        {/* <BsPersonFill size={"100px"} /> */}
-                        <p>
-                          ADD A PROFILE
-                          <span className=" flex justify-center">IMAGE</span>
-                        </p>
-                        <p className=" text-xs">click to upload photo</p>
-                        <input
-                          id="picUpload"
-                          name="picUpload"
-                          // onChange={(e) => profilePhotoSave(e)}
-                          type="file"
-                          accept="image/*"
-                          className=" opacity-0 -z-10 absolute"
-                        />
-                      </div>
-                    {/* )} */}
-                  </label>
-                 </form>
-              </div>
-              <div className='flex gap-x-3 justify-between my-1'>
-                <p className="text-xs">Click picture to change</p>
-                <a 
-                className="text-ts flex text-blue-600 hover:cursor-pointer hover:underline"
-                // onClick={}
-                >
-                  Remove
-                </a>
-              </div>
-            </div>
+          {/* User input fields */}
+          <div className="mb-4">
+            <label htmlFor="name" className="block mb-2">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={user.name}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              placeholder="Enter your name"
+            />
           </div>
-          <div className='flex justify-between'>
-            <h1 className='text-xl font-bold'>Account Information</h1>
+
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={user.email}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              placeholder="Enter your email"
+            />
           </div>
-          <div>
-            <div className='w-full h-[1px] my-4 bg-gradient-to-r from-white to-black mx-auto'></div>
+
+          <div className="mb-4">
+            <label htmlFor="password" className="block mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={user.password}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              placeholder="Enter your password"
+            />
           </div>
-          <form
-          className='bg-white rounded-md max-h-fit w-10/12 px-8 pt-6 pb-8 mb-4 '
-          >
-            <div className='flex gap-x-8'>
-              <div className='mb-6'>
-              <div className="w-full flex flex-col mt-4">
+
           <form action="">
-            <div className="mb-4 flex">
-              <div className="w-1/5">
+            <div className="mb-4 flex ">
+              <div className="w-1/5 ">
                 <label className="block text-sm font-medium text-gray-700">
                   Country
                 </label>
                 <select
                   name="countryCode"
-                  // value={values.countryCode}
-                  // onChange={handleChange}
+                  value={user.countryCode}
+                  onChange={handleInputChange}
                   className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
                 >
-                  {/* {countryCodes.map((country) => (
+                  {countryCodes.map((country) => (
                     <option key={country.code} value={country.code}>
                       {`${country.name} (${country.code})`}
                     </option>
-                  ))} */}
+                  ))}
                 </select>
               </div>
               <div className="mb-4 ml-2 w-[500px]">
@@ -196,8 +211,8 @@ const AccountSettings = () => {
                   type="text"
                   name="phone"
                   placeholder="Phone Number"
-                  // value={values.phone}
-                  // onChange={handleChange}
+                  value={user.phone}
+                  onChange={handleInputChange}
                   className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
                 />
               </div>
@@ -210,8 +225,8 @@ const AccountSettings = () => {
                 type="text"
                 name="name"
                 placeholder="Company Name"
-                // value={values.name}
-                // onChange={handleChange}
+                value={user.name}
+                onChange={handleInputChange}
                 className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
@@ -223,8 +238,8 @@ const AccountSettings = () => {
                 type="text"
                 name="address"
                 placeholder="Address"
-                // value={values.address}
-                // onChange={handleChange}
+                value={user.address}
+                onChange={handleInputChange}
                 className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
@@ -235,8 +250,8 @@ const AccountSettings = () => {
               <input
                 type="date"
                 name="birth_date"
-                // value={values.birth_date}
-                // onChange={handleChange}
+                value={user.birth_date}
+                onChange={handleInputChange}
                 className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
@@ -247,7 +262,7 @@ const AccountSettings = () => {
               <input
                 type="file"
                 name="document"
-                accept=".pdf"
+                // accept=".pdf"
                 // onChange={handleFileChange}
                 className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
               />
@@ -260,8 +275,8 @@ const AccountSettings = () => {
                 type="text"
                 name="bank_acc"
                 placeholder="Bank Account"
-                // value={values.bank_acc}
-                // onChange={handleChange}
+                value={user.bank_acc}
+                onChange={handleInputChange}
                 className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
@@ -270,17 +285,14 @@ const AccountSettings = () => {
               // onClick={navigate("/")}
               className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center cursor-pointer"
             >
-              Save 
+              Save
             </button>
           </form>
-        </div>
-              </div>
-            </div>
-          </form>
+
         </div>
       </div>
     </div>
-  )
+  );
 };
 
-export default AccountSettings;
+export default Dashboard;

@@ -10,26 +10,29 @@ import Landing from "./pages/Landing";
 import DetailEvent from "./pages/DetailEvent";
 import FindEvent from "./pages/FindEvent";
 // import ScrollToTop from "./helper/ScrollToTop";
-import VerifikasiAccount from "../src/pages/VerifikasiEmail/VerifikasiEmail"
+import VerifikasiAccount from "./pages/VerifikasiEmail/Index";
+import Dashboard from "./pages/Dashboard";
+import ForgetPassword from "./components/forgotpassword";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/landing" element={<Landing />} />
-        <Route path="/create_event_profile" element={<CreateEventProfile />}/>
-        <Route path="/user_profile" element={<UserProfile/>}/>
-        <Route path="/accountSettings" element={<AccountSettings/>}/>
+        <Route path="/create_event_profile" element={<CreateEventProfile />} />
+        <Route path="/user_profile" element={<UserProfile />} />
+        <Route path="/accountSettings" element={<AccountSettings />} />
+        <Route path="/forget" element={<ForgetPassword />} />
         {/* ------------- punya audra --------------------- */}
         <Route path="/find-event/:loc" element={<FindEvent />} />
         <Route path="/find-event/:loc/:search" element={<FindEvent />} />
         <Route path="/event/detail/:id" element={<DetailEvent />} />
         <Route path="/auth/verify" element={<VerifikasiAccount />} />
-      {/* <ScrollToTop /> */}
-     </Routes>
-
+        <Route path="/dashboard" element={<Dashboard />} />
+        {/* <ScrollToTop /> */}
+      </Routes>
     </>
   );
 }
