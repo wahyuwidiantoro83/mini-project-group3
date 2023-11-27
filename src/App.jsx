@@ -10,6 +10,8 @@ import FindEvent from "./pages/FindEvent";
 import PublishPage from "./pages/PublishEvent";
 import ManageTicket from "./pages/manageTicketPage";
 import LoginDummy from "./pages/LoginDummy";
+import PageNotFound from "./pages/PageNotFound";
+
 function App() {
   return (
     <>
@@ -26,13 +28,13 @@ function App() {
               
         
         <Route path="/explore" />
-        {/* <Route path="/event/detail/:id" /> */}
-        {/* <Route path="/" element={<Landing />} /> */}
-        <Route path="/find-event" element={<FindEvent />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/find-event/:loc" element={<FindEvent />} />
+        <Route path="/find-event/:loc/:search" element={<FindEvent />} />
         <Route path="/event/detail/:id" element={<DetailEvent />} />
-      </Routes>
-    </>
-  );
-}
+        <Route path="/*" element={<PageNotFound />} />
+        <Route path="/find-event" element={<FindEvent />} />
+</Routes>
+</>)}
 
 export default App;

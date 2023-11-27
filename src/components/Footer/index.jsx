@@ -69,9 +69,9 @@ const Footer = (props) => {
           </ul>
         </div>
       </div>
-      <div className="flex text-xs flex-col items-center gap-4 md:flex-row justify-between px-4 py-4 md:px-8 md:py-4">
+      <div className="flex text-xs flex-col items-center gap-4 lg:flex-row justify-between px-4 py-4 md:px-8 md:py-4">
         <span className="">@eventbright 2023</span>
-        <div className="flex list-disc max-sm:flex-wrap justify-center gap-2">
+        <div className="flex list-disc flex-wrap lg:flex-nowrap justify-center gap-2">
           <span className="hover:underline cursor-pointer hover:text-gray-400">How it Works</span>
           <span className="hover:underline cursor-pointer hover:text-gray-400">Pricing</span>
           <span className="hover:underline cursor-pointer hover:text-gray-400">

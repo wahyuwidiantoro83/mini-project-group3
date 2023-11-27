@@ -9,10 +9,14 @@ import {
   HiOutlineXMark,
   HiUser,
 } from "react-icons/hi2";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const located = useSelector((state) => state.locationReducer.city);
+  const url = useLocation();
+  console.log(url.pathname.includes("find-event"));
   const navigate = useNavigate();
   return (
     <>
@@ -28,13 +32,18 @@ const Navbar = (props) => {
             <div className="brand block md:hidden w-10" onClick={() => navigate("/")}>
               <img className="w-full" src={logoSm} alt="" />
             </div>
-            <div className="hidden md:flex items-center gap-2 rounded-full px-4 py-3 border-2 border-gray-200  bg-gray-100 ">
+            <div
+              className={`hidden ${
+                url.pathname.includes("find-event") ? "" : "md:flex"
+              } items-center gap-2 rounded-full px-4 py-3 border-2 border-gray-200  bg-gray-100 cursor-pointer`}
+              onClick={() => {
+                navigate(`/find-event/${located}`);
+              }}
+            >
               <HiMagnifyingGlass size={"16px"} />
-              <input
-                className=" focus:outline-none placeholder:text-xs bg-transparent max-md:w-14 lg:w-72 text-sm"
-                type="text"
-                placeholder="Search events"
-              />
+              <span className=" focus:outline-none text-xs bg-transparent max-md:w-14 lg:w-72">
+                Search events
+              </span>
             </div>
           </div>
           <div className="flex gap-2 md:gap-4 font-medium text-sm items-center">
