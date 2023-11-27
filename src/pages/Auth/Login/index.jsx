@@ -19,15 +19,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:2066/auths/login", values, {
-        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem("token"))}` },
-      });
+      const response = await axios.post("http://localhost:2066/auths/login", values);
       console.log(response);
 
       if (response.status === 200) {
-        localStorage.setItem("token", JSON.stringify(values));
-        dispatch(login(response.data.values));
-        console.log("Ini Data yang Didapat", values);
+        console.log(response.data);
+        localStorage.setItem("token", response.data.result.token);
+        dispatch(login(response.data.result));
         navigate("/");
       } else {
         console.log("login failed", response.data.message);

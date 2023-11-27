@@ -5,7 +5,7 @@ const accountSlice = createSlice({
   initialState: {
     username: "",
     email: "",
-    password: "",
+    token: "",
     role: "",
   },
   reducers: {
@@ -13,20 +13,22 @@ const accountSlice = createSlice({
       state.role = action.payload;
     },
     login: (state, action) => {
-      state.email = action.payload;
-      state.password = action.payload;
+      state.email = action.payload.email;
+      state.username = action.payload.username;
+      state.role = action.payload.role;
+      state.token = action.payload.token;
     },
     register: (state, action) => {
       state.username = action.payload.username;
       state.email = action.payload.email;
-      state.password = action.payload.password;
+      state.token = action.payload.token;
       state.role = action.payload.role;
       state.showModal = true;
     },
     logout: (state, action) => {
       state.username = "";
       state.email = "";
-      state.password = "";
+      state.token = "";
       state.role = "";
       state.showModal = false;
     },
