@@ -86,7 +86,6 @@ const ManageTicket = () => {
 
   const printDataTicket = () => {
     const today = new Date();
-    // console.log("nambah tidak?",dataTicket);
     return dataTicket.map((val, idx) => {
       if (today > new Date(val.ticketSalesEnd)) {
         return (
@@ -435,7 +434,7 @@ const ManageTicket = () => {
             <button
               className=" bg-black rounded-sm py-2 px-8  text-white hover:bg-slate-700 "
               onClick={() => {
-                navigate("/publish");
+                navigate("/promotor/publish");
               }}
             >
               Next
@@ -448,8 +447,9 @@ const ManageTicket = () => {
 
   const printDataPromo = () => {
     console.log("data Promo di print", dataPromo);
+    console.log("apply nih", applyTo);
     return dataPromo.map((val, idx) => {
-      console.log("masuk persiapan map");
+      console.log("apply nih", applyTo);
       return (
         <li key={idx} className="flex justify-between py-5 px-1">
           <div className=" text-ellipsis overflow-hidden w-[120px]">
@@ -467,7 +467,9 @@ const ManageTicket = () => {
           <div className={`button${idx} relative w-[70px] flex text-lg gap-2`}>
             <button
               className="rounded-sm bg-white p-2 hover:bg-blue-300 shadow-md"
-              onClick={() => console.log("masuk bang")}
+              onClick={() => {
+                setTicketOption(true)
+              }}
             >
               <CiEdit />
             </button>
@@ -690,7 +692,7 @@ const ManageTicket = () => {
               onClick={() => {
                 setButtonFree(true);
                 setButtonPaid(false);
-                setTicketFee("free");
+                setTicketPrice(0);
               }}
             >
               Free
@@ -712,6 +714,7 @@ const ManageTicket = () => {
                   setTicketName(e.target.value);
                 }}
                 value={ticketName}
+                
               />
             </div>
             <div className="w-full mx-auto text-xs text-right mt-1">
@@ -753,6 +756,7 @@ const ManageTicket = () => {
                     setTicketPrice(e.target.value);
                   }}
                   value={ticketPrice}
+                  disabled={buttonFree}
                 />
               </div>
             </div>
@@ -989,6 +993,7 @@ const ManageTicket = () => {
                     promoLimit,
                     discountAmount,
                     applyTo,
+                    applyToBackend:applyTo.length>1?[...applyTo].join(","):[...applyTo].join(""),
                   },
                 ];
 

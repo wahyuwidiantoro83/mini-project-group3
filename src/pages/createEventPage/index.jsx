@@ -9,6 +9,7 @@ import Footer from "../../components/Footer";
 import ScrollToTop from "../../hooks/scrollToTop";
 import { API_URL_PROMOTOR } from "../../helper";
 import axios from "axios";
+import { API_URL } from "../../helper";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const CreateEvent = () => {
   const [eventType, setEventType] = React.useState("Type");
   const [showType2, setShowType2] = React.useState(false);
   const [eventCategory, setEventCategory] = React.useState([]);
+  const [eventCategoryName, setEventCategoryName] = React.useState("Category");
   const [eventCategoryId, setEventCategoryId] = React.useState(0);
   const [eventAddress,setEventAddress]=React.useState("");
   const [eventCity,setEventCity]=React.useState("");
@@ -47,50 +49,55 @@ const CreateEvent = () => {
   }
 
   const printDataCategory = () =>{
-   if(eventCategoryId===0){
-    setEventCategory("Category")
-   } 
-
-   return <li
+   return eventCategory.map((val,idx)=>{
+    return <li
+    key={idx}
    className=" hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
    onClick={() => {
-     setEventCategory("Music");
-     setEventCategoryId(1);
+     setEventCategoryName(val.category);
+     setEventCategoryId(val.id);
+     console.log("category id",val.id);
+     console.log("category val",val.category);
    }}
  >
-   Music
+   {val.category}
  </li>
+   })
   }
 
   useEffect(()=>{
-    const getDataEvent = async ()=>{
+    const getPromotorName = async ()=>{
       const getToken = localStorage.getItem("token")
       try {
-        const response = await API_URL_PROMOTOR.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
-        setPromotorName(response.data.result.name)
+        // const getName = await API_URL.get("/promotor/checkrole",{headers:{Authorization: `Bearer ${getToken}`}})
+        // console.log("nasyj");
+        // setPromotorName(getName.data.result.name)
         
       } catch (error) {
-        console.log("Error get data", error);
+        console.log("Error get data", error.message);
       }
     }
     const getCategory = async ()=>{
       try {
-        const getCategory = await API_URL_PROMOTOR.get("/get-category")
+        const getCategory = await API_URL.get("/category")
+        // const categoryName = getCategory.map((val,idx)=>{val.category})
+        setEventCategory(getCategory.data)
       } catch (error) {
         console.log("error get category",error);
       }
     }
-    getDataEvent()
+    getPromotorName()
     getCategory()
   },[])
 
+  console.log("ini adalah response", promotorName);
   {ScrollToTop()}
   return (
     <LayoutPromotor accountName={promotorName}>
       <div className="">
         <div className="pl-5 pr-10 md:w-[450px] md:mx-auto lg:w-[600px] pb-7">
           <div
-            onClick={() => navigate("/manage/event")}
+            onClick={() => navigate("/promotor/manage-event")}
             className="text-blue-500 font-bold mt-3 w-fit cursor-pointer"
           >
             {"<"} Event
@@ -170,90 +177,14 @@ const CreateEvent = () => {
                   }}
                 >
                   <ul className="">
-                    <li>{eventCategory}</li>
+                    <li>{eventCategoryName}</li>
                     <div
                       className={`absolute w-36 cursor-pointer shadow-lg rounded-sm mt-3  bg-gray-200 ${
                         showType2 ? "block" : "hidden"
                       }`}
                     >
-                      <li
-                        className=" hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Music");
-                          setEventCategoryId(1);
-                        }}
-                      >
-                        Music
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Nightlife");
-                          setEventCategoryId(2)
-                        }}
-                      >
-                        Nightlife
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Performing & VisualArt");
-                          setEventCategoryId(3)
-
-                        }}
-                      >
-                        Performing & VisualArt
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Holidays");
-                          setEventCategoryId(9)
-
-                        }}
-                      >
-                        Holidays
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Health");
-                          setEventCategoryId(10)
-
-                        }}
-                      >
-                        Health
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Hobbies");
-                          setEventCategoryId(11)
-
-                        }}
-                      >
-                        Hobbies
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Business");
-                          setEventCategoryId(12)
-
-                        }}
-                      >
-                        Business
-                      </li>
-                      <li
-                        className="hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-                        onClick={() => {
-                          setEventCategory("Food & Drink");
-                          setEventCategoryId(13)
-
-                        }}
-                      >
-                        Food & Drink
-                      </li>
+                      {printDataCategory()}
+                      
                     </div>
                   </ul>
                   <span>
@@ -372,10 +303,11 @@ const CreateEvent = () => {
           type="button"
           className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
           onClick={() => {
-            const result = {eventTitle,eventType,eventCategory,eventAddress,eventCity,eventDateStart,eventDateEnds,eventStartHour,eventEndHour}
+            const result = {eventTitle,eventType,eventCategoryId,eventAddress,eventCity,eventDateStart,eventDateEnds,eventStartHour,eventEndHour}
+
             const resultStringified = JSON.stringify(result)
             sessionStorage.setItem("basic_info",resultStringified)
-            navigate("/create/event/details")
+            navigate("/promotor/create-event-details")
           }}
         >
           Save & Continue
