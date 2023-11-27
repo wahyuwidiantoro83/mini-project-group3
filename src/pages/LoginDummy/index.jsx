@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import {  API_URL_PROMOTOR } from "../../helper";
+import {  API_URL, API_URL_PROMOTOR } from "../../helper";
 import { useNavigate } from "react-router-dom";
 
 const LoginDummy = () => {
@@ -23,13 +23,14 @@ const LoginDummy = () => {
         type="button"
         onClick={async() => {
             try {
-                const response = await API_URL_PROMOTOR.post("/", { email: email, password: password })
-                console.log("FE response", response);
-                if(response.data.success===true){
+              const response = await API_URL.post("/promotor", { email: email, password: password })
+                if(response.data.result){
                     localStorage.setItem("token",response.data.result)
                     const savedToken = localStorage.getItem("token")
                     console.log("ini savedtoken",savedToken);
                     navigate("/promotor")
+                } else {
+                  alert("you dont have account")
                 }
             } catch (error) {
                 console.log("error login", error);

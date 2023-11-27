@@ -5,7 +5,7 @@ import { FiEdit2, FiEye } from "react-icons/fi";
 import {  useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import axios from "axios";
-import { API_URL_PROMOTOR } from "../../helper";
+import { API_URL_PROMOTOR, API_URL } from "../../helper";
 
 const ManageEvent = () => {
   const [promotorName,setPromotorName] = React.useState("")
@@ -14,6 +14,18 @@ const ManageEvent = () => {
   const [myEvent, setMyEvent] = React.useState([
    
   ]);
+
+const onHandleDelete = async(id) => {
+  try {
+    const getToken = localStorage.getItem("token")
+    const deleteEvent = await API_URL_PROMOTOR.delete(`/manage-event/${id}`,{headers:{Authorization: `Bearer ${getToken}`}})
+    console.log("deleteEvent", deleteEvent);
+    
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 
   const printMyEvent = () => {
     return myEvent.map((val, idx) => {
@@ -27,13 +39,23 @@ const ManageEvent = () => {
           <td className="border border-slate-500 group-hover:bg-slate-200">{val.status}</td>
           <td className={`invisible group-hover:visible group`}>
           <span>
-              <button type="button"><FiEye/></button>
+              <button type="button" 
+              onClick={()=>{
+                const idEvent = val.idEvent
+                console.log("ini idEvent",idEvent);
+              }}><FiEye/></button>
             </span>
           <span>
-              <button type="button"><FiEdit2/></button>
+              <button type="button"
+              onClick={()=>{
+                const idEvent = val.idEvent
+
+                console.log("ini idEvent",idEvent);
+              }}><FiEdit2/></button>
             </span>
             <span>
-              <button type="button"><HiOutlineTrash/></button>
+              <button type="button"
+              onClick={()=>{onHandleDelete(val.idEvent)}}><HiOutlineTrash/></button>
             </span>
           </td>
         </tr>
@@ -57,16 +79,16 @@ const ManageEvent = () => {
     const getDataEvent = async ()=>{
       const getToken = localStorage.getItem("token")
       try {
-        const response = await API_URL_PROMOTOR.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
-        console.log("ini role data",response.data);
-        setPromotorName(response.data.result.name)
+        // const response = await API_URL_PROMOTOR.get("/checkrole",{headers:{Authorization: `Bearer ${getToken}`}})
+        // console.log("ini role data",response.data);
+        // setPromotorName(response.data.result.name)
 
         const getEvent = await API_URL_PROMOTOR.get("/manage-event",{headers:{Authorization: `Bearer ${getToken}`}})
         console.log("ini get event FE",getEvent.data.result);
         setMyEvent(getEvent.data.result)
 
       } catch (error) {
-        console.log("Error get data", error);
+        console.log("Error get data", error.message);
       }
     }
     getDataEvent()
@@ -74,9 +96,9 @@ const ManageEvent = () => {
 
   return (
     <LayoutPromotor accountName={promotorName}>
-      <div className="flex flex-col ml-5 mt-5 md:ml-28">
+      <div className="flex flex-col  mt-5 pb-20 md:ml-28">
         <h1 className=" text-5xl text font-bold">Manage My  Event</h1>
-        <div>
+        <div className="ml-5">
           <button
             type="button"
             className="mt-16 p-4 rounded-lg font-bold text-white bg-black hover:bg-slate-800"
@@ -85,7 +107,7 @@ const ManageEvent = () => {
             Create Your Event!
           </button>
         </div>
-        <div className="flex mt-8 h-12 w-fit bg-gray-200  focus:outline-blue-500 rounded-lg shadow-sm">
+        <div className="flex mt-8 h-12 w-fit ml-5 bg-gray-200  focus:outline-blue-500 rounded-lg shadow-sm">
           <span className=" ml-2 flex my-auto ">
             <HiMagnifyingGlass />
           </span>
@@ -110,9 +132,20 @@ const ManageEvent = () => {
           <tbody>{printMyEvent()}</tbody>
         </table>
           <ul>
-            <li className="bg-yellow-200 ">
-              <div>hai</div>
-            </li>
+            {/* <li className="w-[450px] flex justify-evenly mx-auto  h-[100px]  shadow-md bg-white rounded-sm">
+              <div className="  w-full border-r-[1px]">image</div>
+              <div className=" w-full overflow-hidden text-ellipsis" >
+              <p>Nama Event</p> 
+              <p>Start Event</p> 
+              <p>Start Hour</p> 
+              </div>
+              <div className="bg-orange-300 w-full">
+                <button className=""></button>
+              </div>
+            </li> */}
+            <div className=" pt-4 px-4 md:flex md:flex-col md:ml-[200px] lg:ml-[270px] mb-4 md:mb-[130px]">
+          
+        </div>
           </ul>
       </div>
       <Footer/>

@@ -16,7 +16,7 @@ const PromotorLandingPage = () => {
             <PromotorHeader/>
             <div className="flex flex-col h-[400px] bg-cover bg-center md:h-[430px] " style={{backgroundImage:`url("${PromotorLandingImage}")`}}>
                 <div className="mx-auto text-white font-bold text-5xl text-center mt-6 p-4 md: h-fit w-fit  rounded-full">Create Your <span className=" text-orange-500">Event</span> Based on <span className=" text-orange-500">Market</span>.</div>
-                <button type="button" className="bg-orange-500 font-semibold w-fit text-white mx-auto rounded-full px-6 py-3 my-32  hover:bg-orange-600 md:my-52" onClick={()=>navigate("/create/event")}>Start Your Event!</button>
+                <button type="button" className="bg-orange-500 font-semibold w-fit text-white mx-auto rounded-full px-6 py-3 my-32  hover:bg-orange-600 md:my-52" onClick={()=>navigate("/promotor/create-event")}>Start Your Event!</button>
             </div>
             <Footer/>
         </div>
