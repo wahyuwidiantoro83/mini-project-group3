@@ -7,7 +7,8 @@ import { CiGlobe } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
 import Footer from "../../components/Footer";
 import ScrollToTop from "../../hooks/scrollToTop";
-import { API_URL } from "../../helper";
+import { API_URL_PROMOTOR } from "../../helper";
+import axios from "axios";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -46,22 +47,41 @@ const CreateEvent = () => {
   }
 
   const printDataCategory = () =>{
-   
+   if(eventCategoryId===0){
+    setEventCategory("Category")
+   } 
+
+   return <li
+   className=" hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+   onClick={() => {
+     setEventCategory("Music");
+     setEventCategoryId(1);
+   }}
+ >
+   Music
+ </li>
   }
 
   useEffect(()=>{
     const getDataEvent = async ()=>{
       const getToken = localStorage.getItem("token")
       try {
-        const response = await API_URL.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
+        const response = await API_URL_PROMOTOR.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
         setPromotorName(response.data.result.name)
-
-
+        
       } catch (error) {
         console.log("Error get data", error);
       }
     }
+    const getCategory = async ()=>{
+      try {
+        const getCategory = await API_URL_PROMOTOR.get("/get-category")
+      } catch (error) {
+        console.log("error get category",error);
+      }
+    }
     getDataEvent()
+    getCategory()
   },[])
 
   {ScrollToTop()}

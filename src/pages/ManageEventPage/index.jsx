@@ -5,7 +5,7 @@ import { FiEdit2, FiEye } from "react-icons/fi";
 import {  useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import axios from "axios";
-import { API_URL } from "../../helper";
+import { API_URL_PROMOTOR } from "../../helper";
 
 const ManageEvent = () => {
   const [promotorName,setPromotorName] = React.useState("")
@@ -57,11 +57,11 @@ const ManageEvent = () => {
     const getDataEvent = async ()=>{
       const getToken = localStorage.getItem("token")
       try {
-        const response = await API_URL.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
+        const response = await API_URL_PROMOTOR.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
         console.log("ini role data",response.data);
         setPromotorName(response.data.result.name)
 
-        const getEvent = await API_URL.get("/manage-event",{headers:{Authorization: `Bearer ${getToken}`}})
+        const getEvent = await API_URL_PROMOTOR.get("/manage-event",{headers:{Authorization: `Bearer ${getToken}`}})
         console.log("ini get event FE",getEvent.data.result);
         setMyEvent(getEvent.data.result)
 
@@ -110,7 +110,7 @@ const ManageEvent = () => {
           <tbody>{printMyEvent()}</tbody>
         </table>
           <ul>
-            <li className="bg-yellow-200">
+            <li className="bg-yellow-200 ">
               <div>hai</div>
             </li>
           </ul>

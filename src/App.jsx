@@ -17,7 +17,7 @@ function App() {
     <>
 
       <Routes>
-        <Route path="/" element={<LoginDummy />} />
+        <Route path="/dummy-login" element={<LoginDummy />} />
       {/* PROMOTOR ROUTER */}
         <Route path="/promotor" element={<PromotorLandingPage />} />
         <Route path="/promotor/manage-event" element={<ManageEvent />} />

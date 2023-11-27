@@ -7,7 +7,7 @@ import { TiDeleteOutline } from "react-icons/ti";
 import Footer from "../../components/Footer";
 import ScrollToTop from "../../hooks/scrollToTop";
 import axios from "axios";
-import { API_URL } from "../../helper";
+import { API_URL_PROMOTOR } from "../../helper";
 
 const CreateEventDetails = () => {
   const navigate = useNavigate();
@@ -139,7 +139,7 @@ const CreateEventDetails = () => {
             const formData = new FormData();
             formData.append("fileUpload",imageFile)
             console.log("ini formdata",formData);
-             API_URL.post("/create/event",formData).then((res)=>{
+             API_URL_PROMOTOR.post("/create/event",formData).then((res)=>{
               console.log(res);
              })
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { API_URL } from "../../helper";
+import {  API_URL_PROMOTOR } from "../../helper";
 import { useNavigate } from "react-router-dom";
 
 const LoginDummy = () => {
@@ -23,7 +23,7 @@ const LoginDummy = () => {
         type="button"
         onClick={async() => {
             try {
-                const response = await API_URL.post("/", { email: email, password: password })
+                const response = await API_URL_PROMOTOR.post("/", { email: email, password: password })
                 console.log("FE response", response);
                 if(response.data.success===true){
                     localStorage.setItem("token",response.data.result)
