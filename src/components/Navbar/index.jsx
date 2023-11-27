@@ -56,7 +56,8 @@ const Navbar = (props) => {
             <button className="rounded-full hover:bg-slate-100 px-4 py-2 transition-all duration-300">
               Sign In
             </button>
-            <button className="rounded-full hover:bg-slate-100 px-4 py-2 transition-all duration-300">
+            <button className="rounded-full hover:bg-slate-100 px-4 py-2 transition-all duration-300"
+            onClick={()=>navigate("/dummy-login")}>
               Sign Up
             </button>
             <button
