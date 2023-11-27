@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function ScrollToTop() {
+export default function AutoTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
     const body = document.querySelector("#root");
     body.scrollIntoView(
       {
-        behavior: "smooth",
+        behavior: "instant",
       },
-      500
+      100
     );
   }, [pathname]);
 

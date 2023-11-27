@@ -11,12 +11,12 @@ import PublishPage from "./pages/PublishEvent";
 import ManageTicket from "./pages/manageTicketPage";
 import LoginDummy from "./pages/LoginDummy";
 import PageNotFound from "./pages/PageNotFound";
-import ScrollToTop from "./hooks/scrollToTop";
+import AutoTop from "./helper/auto_top";
 
 function App() {
   return (
     <>
-      <ScrollToTop />
+      <AutoTop />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/dummy-login" element={<LoginDummy />} />
