@@ -174,7 +174,7 @@ const FindEvent = () => {
     <>
       <Navbar />
       <div className="main-content">
-        <div className="flex flex-col px-10">
+        <div className="flex flex-col px-5 md:px-10">
           <div className="flex w-full py-6 items-center border-b-2">
             <div className="flex flex-col w-full gap-2">
               <div className="flex w-full items-center gap-2">
@@ -308,7 +308,7 @@ const FindEvent = () => {
                 {printFilterList()}
               </div>
               {eventsData.length > 0 ? (
-                <div className="grid w-full grid-cols-1 md:grid-cols-3 lg:grid-cols-4 p-4 gap-4">
+                <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-4 gap-4">
                   {printEvent()}
                 </div>
               ) : (
