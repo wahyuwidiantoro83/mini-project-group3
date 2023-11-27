@@ -9,18 +9,22 @@ const EventCard2 = (props) => {
         onClick={() => navigate(`/event/detail/${props.data.id}`)}
       >
         <div className="flex w-[40%] justify-center items-center">
-          <img src={props.data.picture} className=" aspect-video w-full rounded-lg" alt="" />
+          <img
+            src={`http://localhost:2066/public/event/${props.data.image}`}
+            className=" aspect-video w-full rounded-lg"
+            alt=""
+          />
         </div>
         <div className="flex w-[60%] flex-col p-4 gap-3">
-          <span className=" text-lg font-bold line-clamp-3">{props.data.title}</span>
+          <span className=" text-lg font-bold line-clamp-3">{props.data.name}</span>
           <span className=" text-sm font-semibold text-gray-500 line-clamp-2">
-            {props.data.date},{props.data.starthour}
+            {props.data.startDate},{props.data.startHour}
           </span>
           <span className=" text-sm max-w-[90%] text-gray-500 line-clamp-1">
-            {props.data.location}
+            {props.data.address}
           </span>
-          <span className="text-sm font-bold text-gray-500">{props.data.price}</span>
-          <span className=" text-base font-medium">{props.data.promotor}</span>
+          <span className="text-sm font-bold text-gray-500">{props.data.tickets.start_at}</span>
+          <span className=" text-base font-medium">{props.data.auth.accountDetail.name}</span>
         </div>
       </div>
       {/* <div

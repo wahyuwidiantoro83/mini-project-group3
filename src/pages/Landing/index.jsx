@@ -5,20 +5,25 @@ import useDisclosure from "../../hooks/useDisclosure";
 import smallPoster from "../../assets/small.webp";
 import largePoster from "../../assets/large.webp";
 import { HiChevronDown, HiMapPin } from "react-icons/hi2";
-import { data } from "./data";
 import { useNavigate } from "react-router-dom";
 import EventCard from "../../components/EventCard";
 import axios from "axios";
 import Layout from "../../components/Layout";
 import API_CALL from "../../helper/api_backend";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrLocation, location } from "../../redux/slice/locationSlice";
+import EventNotFound from "../../components/EventNotFound";
 
 const Landing = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [category, setCategory] = useState([]);
   const [events, setEvents] = useState([]);
   const [cities, setCities] = useState([]);
+  const dispatch = useDispatch();
+  const located = useSelector((state) => state.locationReducer.city);
+  const navigate = useNavigate();
 
-  const [currLocation, setCurrLocation] = useState("Jakarta");
+  const [currLocation, setCurrLocation] = useState("");
   const [currType, setCurrType] = useState("all");
   const [searchLocation, setSearchLocation] = useState("");
 
@@ -46,11 +51,11 @@ const Landing = () => {
   const getEvent = async () => {
     const dataEvent = await API_CALL.get("/event", {
       params: {
-        city: currLocation,
+        city: located,
         landingType: currType,
       },
     });
-    setEvents(dataEvent.data);
+    setEvents(dataEvent.data.result.data);
   };
 
   const getSearchLocation = async () => {
@@ -64,10 +69,10 @@ const Landing = () => {
 
   useEffect(() => {
     if (sessionStorage.getItem("currLocation")) {
-      setCurrLocation(sessionStorage.getItem("currLocation"));
+      dispatch(location({ city: sessionStorage.getItem("currLocation") }));
     } else {
       navigator.geolocation.getCurrentPosition((position) => {
-        getLocation(position.coords.latitude, position.coords.longitude);
+        dispatch(getCurrLocation(position.coords.latitude, position.coords.longitude));
       });
     }
     getCategory();
@@ -78,7 +83,7 @@ const Landing = () => {
 
   useEffect(() => {
     getEvent();
-  }, [currLocation, currType]);
+  }, [located, currType]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -95,14 +100,15 @@ const Landing = () => {
     { filter: "Free", value: "free" },
   ];
 
-  const navigate = useNavigate();
-
   const printcategory = () => {
     return category.map((value, idx) => {
       return (
         <div
           key={idx}
           className="group/category flex flex-col  items-center text-xs font-medium gap-2 cursor-pointer "
+          onClick={() => {
+            navigate(`/find-event/${located}?category=${value.category}`);
+          }}
         >
           <div className="flex w-14 md:w-28 aspect-square rounded-full p-4 md:p-9 bg-white group-hover/category:bg-gray-300 justify-center items-center">
             <img
@@ -154,7 +160,7 @@ const Landing = () => {
           className="flex w-full h-16 items-center p-5 gap-4 hover:bg-slate-100 cursor-pointer"
           onClick={() => {
             onClose();
-            setCurrLocation(value.city);
+            dispatch(location({ city: value.city }));
             sessionStorage.setItem("currLocation", value.city);
           }}
         >
@@ -173,11 +179,16 @@ const Landing = () => {
         <div className="main-poster w-full h-fit relative">
           <img className="hidden md:block w-full" src={largePoster} alt="" />
           <img className="md:hidden w-full" src={smallPoster} alt="" />
-          <button className=" absolute bottom-6 left-6 md:left-14 lg:left-36 bg-gray-800 px-5 py-3 rounded-md text-sm font-medium text-white">
+          <button
+            className=" absolute bottom-6 left-6 md:left-14 lg:left-36 bg-gray-800 px-5 py-3 rounded-md text-sm font-medium text-white"
+            onClick={() => {
+              navigate(`/find-event/${located}`);
+            }}
+          >
             Find your next event
           </button>
         </div>
-        <div className="main-category grid w-full grid-cols-4 lg:grid-cols-8 gap-4 bg-gray-200 px-7 md:px-20 lg:px-32 py-6 md:py-8 lg:py-11">
+        <div className="main-category grid w-full grid-cols-4 min-h-[150px] lg:grid-cols-8 gap-4 bg-gray-200 px-7 md:px-20 lg:px-32 py-6 md:py-8 lg:py-11">
           {printcategory()}
         </div>
         <div className="section-filter min-h-screen px-8 py-6 md:px-24 lg:px-36">
@@ -191,8 +202,8 @@ const Landing = () => {
                 className={`focus:outline-none border-b-2 border-gray-500 w-[200px]`}
                 type="text"
                 placeholder="Choose Location"
-                defaultValue={currLocation}
-                key={currLocation}
+                defaultValue={located}
+                key={located}
                 onClick={onOpen}
                 onChange={(e) => {
                   setSearchLocation(e.target.value);
@@ -209,7 +220,9 @@ const Landing = () => {
                     onClick={() => {
                       onClose();
                       navigator.geolocation.getCurrentPosition((position) => {
-                        getLocation(position.coords.latitude, position.coords.longitude);
+                        dispatch(
+                          getCurrLocation(position.coords.latitude, position.coords.longitude)
+                        );
                       });
                     }}
                   >
@@ -227,16 +240,27 @@ const Landing = () => {
             {printFilter()}
           </div>
           <div className="event-container flex flex-col gap-6 py-8">
-            <span className="text-2xl font-bold">Events in {currLocation}</span>
-            <div className=" h-fit grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {printEvent()}
-            </div>
-            <button
-              className=" w-full self-center border-2 py-3 font-medium md:w-96 text-sm border-gray-400 hover:border-gray-800 hover:bg-gray-100 duration-200"
-              type="button"
-            >
-              See More
-            </button>
+            <span className="text-2xl font-bold">Events in {located}</span>
+            {events.length > 0 ? (
+              <div className=" h-fit grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {printEvent()}
+              </div>
+            ) : (
+              <EventNotFound />
+            )}
+            {events.length >= 8 ? (
+              <button
+                className=" w-full self-center border-2 py-3 font-medium md:w-96 text-sm border-gray-400 hover:border-gray-800 hover:bg-gray-100 duration-200"
+                type="button"
+                onClick={() => {
+                  navigate(`/find-event/${located}`);
+                }}
+              >
+                See More
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
