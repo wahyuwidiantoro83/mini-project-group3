@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import accountReducer from "./slice/accountSlice";
 import locationReducer from "./slice/locationSlice";
 
 const globalState = configureStore({
   reducer: {
-    // reducer1,
-    // reducer2,
+    accountReducer,
     locationReducer,
   },
 });

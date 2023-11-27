@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import useDisclosure from "../../hooks/useDisclosure";
@@ -43,8 +44,12 @@ const Landing = () => {
   };
 
   const getCategory = async () => {
-    const dataCategory = await API_CALL.get("/category");
-    setCategory(dataCategory.data);
+    try {
+      const dataCategory = await API_CALL.get("/category");
+      setCategory(dataCategory.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const getEvent = async () => {
