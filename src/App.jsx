@@ -11,11 +11,14 @@ import PublishPage from "./pages/PublishEvent";
 import ManageTicket from "./pages/manageTicketPage";
 import LoginDummy from "./pages/LoginDummy";
 import PageNotFound from "./pages/PageNotFound";
+import ScrollToTop from "./hooks/scrollToTop";
 
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/dummy-login" element={<LoginDummy />} />
         {/* PROMOTOR ROUTER */}
         <Route path="/promotor" element={<PromotorLandingPage />} />
@@ -24,8 +27,6 @@ function App() {
         <Route path="/promotor/create-event" element={<CreateEvent />} />
         <Route path="/promotor/create-event-details" element={<CreateEventDetails />} />
         <Route path="/promotor/publish" element={<PublishPage />} />
-
-        <Route path="/" element={<Landing />} />
         <Route path="/find-event/:loc" element={<FindEvent />} />
         <Route path="/find-event/:loc/:search" element={<FindEvent />} />
         <Route path="/event/detail/:id" element={<DetailEvent />} />
