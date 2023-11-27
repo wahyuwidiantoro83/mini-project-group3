@@ -22,10 +22,11 @@ const Login = () => {
       if(response.status === 201) {
         dispatch(login({values}));
         localStorage.setItem("token", JSON.stringify(values))
-        console.log("");
+        console.log("Ini Data yang Didapat", values);
+        navigate("/login")
+      } else {
+        console.log("login failed", response.data.message);
       }
-      console.log(response.data.token);
-      navigate("/landing");
     } catch (error) {
       console.log(error);
       alert("The account is not registered yet")
@@ -62,11 +63,11 @@ const Login = () => {
             <p className="text-base mb-2">Welcome! Please enter your details.</p>
           </div>
                 <div className="w-full flex flex-col">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-[12px] font-medium text-gray-700">
                 Email
               </label>
                 <input 
-                type="email"
+                type="email" 
                 placeholder="Email"
                 value={values.email}
                 onChange={handleSubmit}
@@ -96,11 +97,11 @@ const Login = () => {
                     <button className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
                         Log in
                     </button>
-                    < button
-                    
+                    < Link
+                    to={"/register"}
                     className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
                         Register
-                    </button>
+                    </Link>
                 </div>
 
                 <div className="w-full flex item-center justify-center relative py-2">

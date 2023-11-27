@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import COVER_IMAGE from "../../assets/COVER_IMAGE.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/slice/accountSlice";
 import axios from "axios";
@@ -11,6 +11,7 @@ import axios from "axios";
 const UserProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  n  
   const [values, setValues] = useState({
     countryCode: "",
     phone: "",
@@ -36,13 +37,15 @@ const UserProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); 
     try {
-      const response = await axios.post("http://localhost:2023/accountDetail/registrasi", values)
+      const response = await axios.post("http://localhost:2023/accountDetail/registrasi", values,
+      {headers: {Authorization: `Bearer ${searchParams.get("token")}`} }
+      )
       
       if (response.status === 201) {
         dispatch(register({ ...values, role: "USER" }));
         localStorage.setItem("user", JSON.stringify({ ...values, role: "USER" }));
         console.log("Submitted Values (UserProfile):", values);
-        navigate("/");
+        navigate("/login");
       } else {
         console.log("Submission failed:", response.data.message);
       }

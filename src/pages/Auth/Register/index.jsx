@@ -80,20 +80,20 @@ const Register = () => {
  console.log(values);
     try {
       
-      const response = await axios.post(API_URL + `/auth/regis`, values);
-  
+      const response = await axios.post("http://localhost:2023/auths/regis", values);
+      console.log(data);
       console.log("INI RESPONSE", response);
       console.log("Form input values", values);
       
       if (response.status === 201) {
-        response.data.token
-        dispatch(register(response.data.token));
-        localStorage.setItem("user", JSON.stringify(response.data.token));
+        response.data.values
+        dispatch(register(response.data.values));  
+        localStorage.setItem("user", JSON.stringify(response.data.values));
  
         if(values.role === "USER") {
-          navigate("/landing");
+          navigate("/user_profile");
         } else if (values.role === "PROMOTOR") {
-          navigate("/landing");
+          navigate("/create_event_profile");
         }
       } else {
         console.log("Registration failed:", response.data.message);
@@ -144,7 +144,7 @@ const Register = () => {
                     name={input.name}
                     value={values[input.name]}
                     onChange={onChange}
-                    className="w-full py-2 my-2 bg-transparent outline-none focus:outline-none rounded-md"
+                    className="w-full py-2 my-2 bg-transparent outline-none focus:outline-none rounded-md"                                                       
                     style={{ border: '1px solid #000' }}
                     required={input.required}
                   >
