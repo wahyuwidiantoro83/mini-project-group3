@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import locationReducer from "./slice/locationSlice";
 
 const globalState = configureStore({
-  reducer: {},
+  reducer: {
+    locationReducer,
+  },
 });
 
 export default globalState;
