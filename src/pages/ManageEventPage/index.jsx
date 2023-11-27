@@ -5,8 +5,10 @@ import { FiEdit2, FiEye } from "react-icons/fi";
 import {  useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import axios from "axios";
+import { API_URL } from "../../helper";
 
 const ManageEvent = () => {
+  const [promotorName,setPromotorName] = React.useState("")
   const navigate = useNavigate()
     const [showOption,setShowOption] = React.useState(false) 
   const [myEvent, setMyEvent] = React.useState([
@@ -64,14 +66,26 @@ const ManageEvent = () => {
     }
   }
 
-  // useEffect(()=>{
-  //   try
-  // }, [])
+  useEffect(()=>{
+    const getDataEvent = async ()=>{
+      const getToken = localStorage.getItem("token")
+      try {
+        const response = await API_URL.post("/auth/checkrole",{},{headers:{Authorization: `Bearer ${getToken}`}})
+        console.log("ini role data",response.data);
+        setPromotorName(response.data.result.name)
+
+        const getEvent = await API_URL.get("/manage-event",{headers:{Authorization: `Bearer ${getToken}`}})
+      } catch (error) {
+        console.log("Error get data", error);
+      }
+    }
+    getDataEvent()
+  },[])
 
   return (
-    <LayoutPromotor>
+    <LayoutPromotor accountName={promotorName}>
       <div className="flex flex-col ml-5 mt-5 md:ml-28">
-        <h1 className=" text-5xl text font-bold">Manage My Event</h1>
+        <h1 className=" text-5xl text font-bold">Manage My  Event</h1>
         <div>
           <button
             type="button"

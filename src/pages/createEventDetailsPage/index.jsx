@@ -15,17 +15,28 @@ const CreateEventDetails = () => {
   const [fileName, setFileName] = React.useState("No selected file");
   const [eventDesc, setEventDesc]=React.useState("")
   const [imageFile,setImageFile]=React.useState("")
-  const [openModal, setOpenModal]=React.useState(false)
 
   const eventBasic_info = sessionStorage.getItem("basic_info")
   const eventBasic_infoParsed = JSON.parse(eventBasic_info)
   const eventStart = new Date (eventBasic_infoParsed.eventDateStart)
 
+  const [openModal, setOpenModal]=React.useState(false)
   const modalBox = ()=>{
-    document.body.style.overflow="hidden"
+    document.body.style.overflow=openModal?"hidden":"auto"
     return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
-      <div className="bg-white w-[350px] rounded-sm py-4 px-4">
-
+      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+        <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
+        <div className="flex justify-center gap-3 mt-[50px]">
+        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{setOpenModal(false)
+        document.body.style.overflow="auto"}}>No</button>
+        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{
+          sessionStorage.removeItem("basic_info")
+          document.body.style.overflow="auto"
+          navigate("/promotor")
+        }}>Yes</button>
+        </div>
       </div>
     </div>
   }
@@ -112,7 +123,7 @@ const CreateEventDetails = () => {
       <div className="flex gap-3 mt-6 justify-end pr-4 pb-6 ">
         <button
           type="button"
-          className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
+          className="rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
           onClick={()=>{setOpenModal(true)}}
         >
           Discard
@@ -136,8 +147,6 @@ const CreateEventDetails = () => {
             const resultDetailsStringified = JSON.stringify(resultDetails)
             sessionStorage.setItem("details", resultDetailsStringified)
             navigate("/manage/ticket")
-           
-            
           }}
         >
           Save & Continue

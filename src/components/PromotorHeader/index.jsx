@@ -6,7 +6,7 @@ import { HiOutlineBars3, HiMagnifyingGlass } from "react-icons/hi2";
 import { AiFillCaretDown } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
-const PromotorHeader = () => {
+const PromotorHeader = (props) => {
   const navigate = useNavigate();
   const [showMenu1, setShowMenu1] = React.useState(false);
   const [showMenu2, setShowMenu2] = React.useState(false);
@@ -20,11 +20,11 @@ const PromotorHeader = () => {
     },
     {
       name: "Manage My Event",
-      path: "/manage/event",
+      path: "/promotor/manage-event",
     },
     {
       name: "Manage My Ticket",
-      path: "/manage/ticket",
+      path: "promotor/manage-ticket",
     },
     {
       name: "Account Setting",
@@ -127,7 +127,7 @@ const PromotorHeader = () => {
             onClick={() => setShowMenu1(!showMenu1)}
           >
             <img className="w-7" src={logoSm} alt="" />
-            <span className="px-2 py-2">Account.name</span>
+            <span className="px-2 py-2">{props.accountName}</span>
             <span className="my-auto">
               <AiFillCaretDown />
             </span>

@@ -4,10 +4,12 @@ import PromotorLandingImagesm from "../../assets/PromotorLandingImagesm.jpg";
 import PromotorLandingImage from "../../assets/PromotorLandingImage.jpg"
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
+import ScrollToTop from "../../hooks/scrollToTop";
 
 
 const PromotorLandingPage = () => {
     const navigate = useNavigate()
+    {ScrollToTop()}
     return (
         <div>
             {/* <PromotorHeader/> */}

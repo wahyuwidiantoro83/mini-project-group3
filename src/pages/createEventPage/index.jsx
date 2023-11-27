@@ -23,6 +23,25 @@ const CreateEvent = () => {
   const [eventDateEnds,setEventDateEnds]=React.useState("");
   const [eventStartHour,setEventStartHour]=React.useState("");
   const [eventEndHour,setEventEndHour]=React.useState("");
+  const [openModal, setOpenModal]=React.useState(false)
+  const modalBox = ()=>{
+    document.body.style.overflow=openModal?"hidden":"auto"
+    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+        <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
+        <div className="flex justify-center gap-3 mt-[50px]">
+        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{setOpenModal(false)
+        document.body.style.overflow="auto"}}>No</button>
+        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{
+          document.body.style.overflow="auto"
+          navigate("/promotor")
+        }}>Yes</button>
+        </div>
+      </div>
+    </div>
+  }
 
   {ScrollToTop()}
   return (
@@ -304,6 +323,7 @@ const CreateEvent = () => {
         <button
           type="button"
           className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
+          onClick={()=>setOpenModal(true)}
         >
           Discard
         </button>
@@ -319,6 +339,9 @@ const CreateEvent = () => {
         >
           Save & Continue
         </button>
+      </div>
+      <div className={`${openModal ? "visible " : "invisible"}`}>
+          {modalBox()}
       </div>
       <Footer />
     </LayoutPromotor>

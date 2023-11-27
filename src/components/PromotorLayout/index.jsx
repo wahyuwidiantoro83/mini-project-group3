@@ -4,7 +4,7 @@ import PromotorSideBar from "../PromotorSideBar"
 
 const LayoutPromotor = (props) => {
     return <div className="flex flex-col">
-        <PromotorHeader/>
+        <PromotorHeader accountName={props.accountName}/>
         <PromotorSideBar/>
         {props.children}
     </div>

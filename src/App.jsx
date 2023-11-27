@@ -9,22 +9,20 @@ import DetailEvent from "./pages/DetailEvent";
 import FindEvent from "./pages/FindEvent";
 import PublishPage from "./pages/PublishEvent";
 import ManageTicket from "./pages/manageTicketPage";
+import LoginDummy from "./pages/LoginDummy";
 function App() {
   return (
     <>
 
       <Routes>
-        
-        <Route path="/" element={<PromotorLandingPage />} />
-
-
+        <Route path="/" element={<LoginDummy />} />
       {/* PROMOTOR ROUTER */}
         <Route path="/promotor" element={<PromotorLandingPage />} />
-        <Route path="/manage/event" element={<ManageEvent />} />
-        <Route path="/manage/ticket" element={<ManageTicket />} />
-        <Route path="/create/event" element={<CreateEvent />} />
-        <Route path="/create/event/details" element={<CreateEventDetails />} />
-        <Route path="/publish" element={<PublishPage />} />
+        <Route path="/promotor/manage-event" element={<ManageEvent />} />
+        <Route path="/promotor/manage-ticket" element={<ManageTicket />} />
+        <Route path="/promotor/create-event" element={<CreateEvent />} />
+        <Route path="/promotor/create-event-details" element={<CreateEventDetails />} />
+        <Route path="/promotor/publish" element={<PublishPage />} />
               
         
         <Route path="/explore" />

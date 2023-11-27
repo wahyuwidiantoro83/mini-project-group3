@@ -3,15 +3,12 @@ import Footer from "../../components/Footer";
 import LayoutPromotor from "../../components/PromotorLayout";
 import PromotorSubSideBar from "../../components/PromotorSubSideBar";
 import { HiTicket } from "react-icons/hi2";
-import { FaLess, FaRupiahSign } from "react-icons/fa6";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { FaCircle } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiDiscount1 } from "react-icons/ci";
 import ScrollToTop from "../../hooks/scrollToTop";
-import { current } from "@reduxjs/toolkit";
 
 const ManageTicket = () => {
   const [ticketOption, setTicketOption] = React.useState(false);
@@ -80,29 +77,7 @@ const ManageTicket = () => {
   // DATA TICKET UNTUK DI PUSH KE SESSION STORAGE
   const [dataTicket, setDataTicket] = React.useState([]);
   // DATA PROMO UNTUK DI PUSH KE SESSION STORAGE
-  const [dataPromo, setDataPromo] = React.useState([
-    // {
-    //   promoName: "HalfOff",
-    //   discount: 1000000,
-    //   uses: 10,
-    //   discountStart: new Date("2023-10-17T19:30"),
-    //   discountEnd: new Date("2023-11-18T23:00"),
-    // },
-    // {
-    //   promoName: "twentyPercentOff",
-    //   discount: 20,
-    //   uses: 10,
-    //   discountStart: new Date("2023-10-01T19:30"),
-    //   discountEnd: new Date("2023-10-11T21:00"),
-    // },
-    // {
-    //   promoName: "tenPercentOff",
-    //   discount: 10,
-    //   uses: 10,
-    //   discountStart: new Date("2023-10-30T19:30"),
-    //   discountEnd: new Date("2024-01-30T19:30"),
-    // },
-  ]);
+  const [dataPromo, setDataPromo] = React.useState([]);
 
   // Setting get session storage event info basic and detail
   const eventBasic_info = sessionStorage.getItem("basic_info");
@@ -1099,6 +1074,29 @@ const ManageTicket = () => {
     );
   };
 
+  const [openModal, setOpenModal]=React.useState(false)
+  const modalBox = ()=>{
+    document.body.style.overflow=openModal?"hidden":"auto"
+    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+        <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
+        <div className="flex justify-center gap-3 mt-[50px]">
+        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{setOpenModal(false)
+        document.body.style.overflow="auto"}}>No</button>
+        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{
+          sessionStorage.removeItem("basic_info")
+          sessionStorage.removeItem("details")
+          document.body.style.overflow="auto"
+          navigate("/promotor")
+        }}>Yes</button>
+        </div>
+      </div>
+    </div>
+  }
+
+
   React.useEffect(() => {});
   {
     ScrollToTop();
@@ -1145,7 +1143,9 @@ const ManageTicket = () => {
       <div className={`${toggleModal ? "visible " : "invisible"}`}>
         {modalApplyDiscount()}
       </div>
-
+      <div className={`${openModal ? "visible " : "invisible"}`}>
+          {modalBox()}
+      </div>
       <Footer />
     </LayoutPromotor>
   );

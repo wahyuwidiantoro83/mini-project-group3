@@ -5,8 +5,10 @@ import { IoTicketOutline } from "react-icons/io5";
 import { FaUsers } from "react-icons/fa6";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import Footer from "../../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const PublishPage = () => {
+  const navigate = useNavigate()
   const [dayName, setDayName] = React.useState([
     "Sunday",
     "Monday",
@@ -31,6 +33,33 @@ const PublishPage = () => {
     "Dec",
   ]);
 
+  const [openModal, setOpenModal]=React.useState(false)
+  const modalBox = ()=>{
+    document.body.style.overflow=openModal?"hidden":"auto"
+    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+        <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
+        <div className="flex justify-center gap-3 mt-[50px]">
+        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{setOpenModal(false)
+        document.body.style.overflow="auto"}}>No</button>
+        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{
+          sessionStorage.removeItem("basic_info")
+          sessionStorage.removeItem("details")
+          sessionStorage.removeItem("ticket-info")
+          if(sessionStorage.getItem("promo-info")) {
+            sessionStorage.removeItem("promo-info")
+          }
+          document.body.style.overflow="auto"
+          navigate("/promotor")
+        }}>Yes</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  
   // Setting get session storage event info basic and detail
   const eventBasic_info = sessionStorage.getItem("basic_info");
   const eventBasic_infoParsed = JSON.parse(eventBasic_info);
@@ -115,6 +144,7 @@ const PublishPage = () => {
         <button
           type="button"
           className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
+          onClick={()=>{setOpenModal(true)}}
         >
           Discard
         </button>
@@ -127,6 +157,9 @@ const PublishPage = () => {
         >
           Publish
         </button>
+      </div>
+      <div className={`${openModal ? "visible " : "invisible"}`}>
+          {modalBox()}
       </div>
       <Footer />
     </LayoutPromotor>
