@@ -14,7 +14,7 @@ const VerifikasiAccount = () => {
         console.log("cek data",data);
       try {
         const response = await axios.post(
-          "http://localhost:2023/auth/verify",
+          "http://localhost:2023/auths/verify",
           {},
           { headers: { Authorization: `Bearer ${searchParams.get("token")}` } }
         );

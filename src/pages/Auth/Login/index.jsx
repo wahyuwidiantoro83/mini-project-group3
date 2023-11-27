@@ -14,14 +14,27 @@ const Login = () => {
     password: "",
   });
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axiosInstance
-  //   } catch (error) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post("http://localhost:2023/auths/login", values);
       
-  //   }
-  // }
+      if(response.status === 201) {
+        dispatch(login({values}));
+        localStorage.setItem("token", JSON.stringify(values))
+        console.log("");
+      }
+      console.log(response.data.token);
+      navigate("/landing");
+    } catch (error) {
+      console.log(error);
+      alert("The account is not registered yet")
+    }
+  };
+
+  const onChange = (e) => {
+    setValues({...values, [e.target.name]: e.target.value});
+  }
 
   return (
     <div className=" w-full h-screen flex flex-col sm:flex-row items-start">
@@ -49,14 +62,24 @@ const Login = () => {
             <p className="text-base mb-2">Welcome! Please enter your details.</p>
           </div>
                 <div className="w-full flex flex-col">
+                <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
                 <input 
                 type="email"
                 placeholder="Email"
+                value={values.email}
+                onChange={handleSubmit}
                 className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none "
                 />
+                <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
                 <input 
                 type="password"
                 placeholder="Password"
+                value={values.password}
+                onChange={handleSubmit}
                 className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none "
                 />
                 </div>
@@ -73,11 +96,11 @@ const Login = () => {
                     <button className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
                         Log in
                     </button>
-                    < Link 
-                    to={"/register"}
+                    < button
+                    
                     className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center cursor-pointer">
                         Register
-                    </Link>
+                    </button>
                 </div>
 
                 <div className="w-full flex item-center justify-center relative py-2">

@@ -29,13 +29,13 @@ const CreateEventProfile = () => {
   //   bank_acc: "",
   // });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setValues({
-  //     ...values,
-  //     [name]: value,
-  //   });
-  // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
 
   // const handleFileChange = (e) => {
   //   const files = e.target.files;
@@ -57,42 +57,42 @@ const CreateEventProfile = () => {
     { code: "+62", name: "Indonesia" },
   ];
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const formData = new FormData();
-  //     Object.entries(values).forEach(([key, value]) => {
-  //       console.log([key, value]);
-  //       formData.append(key, value);
-  //     });
-  //     console.log("TEST", formData);
-  //     const response = await axios.post(
-  //       "http://localhost:2023/accountDetail/registrasi",
-  //       {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+        console.log([key, value]);
+        formData.append(key, value);
+      });
+      console.log("TEST", formData);
+      const response = await axios.post(
+        "http://localhost:2023/accountDetail/registrasi",
+        {
 
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-  //     if (response.status === 201) {
-  //       dispatch(register({ ...values, role: "EVENT ORGANIZER" }));
-  //       localStorage.setItem(
-  //         "promotor",
-  //         JSON.stringify({ ...values, role: "EVENT ORGANIZER" })
-  //       );
-  //       console.log("Submitted Values (CreateEventProfile):", values);
-  //       navigate("/");
-  //     } else {
-  //       console.log("Submission failed:", response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.log("Error submitting data:", error);
-  //   }
-  // };
+      if (response.status === 201) {
+        dispatch(register({ ...values, role: "EVENT ORGANIZER" }));
+        localStorage.setItem(
+          "promotor",
+          JSON.stringify({ ...values, role: "EVENT ORGANIZER" })
+        );
+        console.log("Submitted Values (CreateEventProfile):", values);
+        navigate("/");
+      } else {
+        console.log("Submission failed:", response.data.message);
+      }
+    } catch (error) {
+      console.log("Error submitting data:", error);
+    }
+  };
 
   return (
     <div className=" w-full h-screen flex flex-col sm:flex-row items-start">
@@ -144,19 +144,6 @@ const CreateEventProfile = () => {
                 name="name"
                 placeholder="Company Name"
                 value={values.name}
-                onChange={handleChange}
-                className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                placeholder="Address"
-                value={values.address}
                 onChange={handleChange}
                 className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
               />

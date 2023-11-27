@@ -5,13 +5,15 @@ const accountSlice = createSlice({
   initialState: {
     username: "",
     email: "",
-    password: "",
     role: "",
-    showModal: false,
+    token: "",
   },
   reducers: {
     setRole: (state, action) => {
       state.role = action.payload;
+    },
+    login: (state, action) => {
+      state.email = action.payload;
     },
     register: (state, action) => {
       state.username = action.payload.username;
