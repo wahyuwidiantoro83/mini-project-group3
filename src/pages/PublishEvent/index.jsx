@@ -6,6 +6,8 @@ import { FaUsers } from "react-icons/fa6";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { API_URL_PROMOTOR } from "../../helper";
+import ScrollToTop from "../../hooks/scrollToTop";
 
 const PublishPage = () => {
   const navigate = useNavigate()
@@ -34,6 +36,8 @@ const PublishPage = () => {
   ]);
 
   const [openModal, setOpenModal]=React.useState(false)
+  const [openModalPublish, setOpenModalPublish]=React.useState(false)
+ 
   const modalBox = ()=>{
     document.body.style.overflow=openModal?"hidden":"auto"
     return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
@@ -59,6 +63,45 @@ const PublishPage = () => {
     </div>
   }
 
+  const onHandleClick = async()=>{
+    try {
+      const basicInfo=JSON.parse(sessionStorage.getItem("basic_info"))
+      const detailInfo=JSON.parse(sessionStorage.getItem("details"))
+      const eventInfo = {...basicInfo,...detailInfo}
+      const ticketInfo = JSON.parse(sessionStorage.getItem("ticket-info"))
+      const promoInfo = JSON.parse(sessionStorage.getItem("promo-info"))
+      const getToken = localStorage.getItem("token")
+   
+      const createEvent = await API_URL_PROMOTOR.post("/publish",{event:eventInfo,ticket:ticketInfo,promo:promoInfo},{headers:{Authorization: `Bearer ${getToken}`}})
+  
+      document.body.style.overflow="auto"
+      sessionStorage.removeItem("basic_info")
+      sessionStorage.removeItem("promo-info")
+      sessionStorage.removeItem("ticket-info")
+      sessionStorage.removeItem("details")
+      alert("Berhasil menambahkan event")
+      navigate("/promotor/manage-event")
+    } catch (error) {
+      console.log(error.message);
+    }
+   
+  }
+  const modalPublishBox = ()=>{
+    document.body.style.overflow=openModalPublish?"hidden":"auto"
+    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+        <p className=" text-center font-semibold">Are you sure want to PUBLISH this event?</p>
+        <div className="flex justify-center gap-3 mt-[50px]">
+        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={()=>{setOpenModalPublish(false)
+        document.body.style.overflow="auto"}}>No</button>
+        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+        onClick={onHandleClick}>Yes</button>
+        </div>
+      </div>
+    </div>
+  }
+
   
   // Setting get session storage event info basic and detail
   const eventBasic_info = sessionStorage.getItem("basic_info");
@@ -77,7 +120,7 @@ const PublishPage = () => {
   });
   const lowestTicketPrice = Math.min(...allTicketPrice);
   const highestTicketPrice = Math.max(...allTicketPrice);
-
+  {ScrollToTop()}
   return (
     <LayoutPromotor>
       <div className="flex flex-col  md:flex-row ">
@@ -151,7 +194,7 @@ const PublishPage = () => {
         <button
           type="button"
           className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
-          onClick={() => {
+          onClick={() => {setOpenModalPublish(true)
             
           }}
         >
@@ -160,6 +203,9 @@ const PublishPage = () => {
       </div>
       <div className={`${openModal ? "visible " : "invisible"}`}>
           {modalBox()}
+      </div>
+      <div className={`${openModalPublish ? "visible " : "invisible"}`}>
+          {modalPublishBox()}
       </div>
       <Footer />
     </LayoutPromotor>

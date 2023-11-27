@@ -146,7 +146,7 @@ const CreateEventDetails = () => {
             const resultDetails = {fileName,eventDesc}
             const resultDetailsStringified = JSON.stringify(resultDetails)
             sessionStorage.setItem("details", resultDetailsStringified)
-            navigate("/manage/ticket")
+            navigate("/promotor/manage-ticket")
           }}
         >
           Save & Continue
