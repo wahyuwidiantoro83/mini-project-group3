@@ -13,7 +13,7 @@ import { API_URL } from "../../helper";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
-  const [promotorName,setPromotorName]= React.useState("");
+  const [promotorName, setPromotorName] = React.useState("");
   const [countMax, setCountMax] = React.useState(0);
   const [eventTitle, setEventTitle] = React.useState("");
   const [showType, setShowType] = React.useState(false);
@@ -22,76 +22,89 @@ const CreateEvent = () => {
   const [eventCategory, setEventCategory] = React.useState([]);
   const [eventCategoryName, setEventCategoryName] = React.useState("Category");
   const [eventCategoryId, setEventCategoryId] = React.useState(0);
-  const [eventAddress,setEventAddress]=React.useState("");
-  const [eventCity,setEventCity]=React.useState("");
-  const [eventDateStart,setEventDateStart]=React.useState("");
-  const [eventDateEnds,setEventDateEnds]=React.useState("");
-  const [eventStartHour,setEventStartHour]=React.useState("");
-  const [eventEndHour,setEventEndHour]=React.useState("");
-  const [openModal, setOpenModal]=React.useState(false)
-  const modalBox = ()=>{
-    document.body.style.overflow=openModal?"hidden":"auto"
-    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
-      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
-        <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
-        <div className="flex justify-center gap-3 mt-[50px]">
-        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
-        onClick={()=>{setOpenModal(false)
-        document.body.style.overflow="auto"}}>No</button>
-        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
-        onClick={()=>{
-          document.body.style.overflow="auto"
-          navigate("/promotor")
-        }}>Yes</button>
+  const [eventAddress, setEventAddress] = React.useState("");
+  const [eventCity, setEventCity] = React.useState("");
+  const [eventDateStart, setEventDateStart] = React.useState("");
+  const [eventDateEnds, setEventDateEnds] = React.useState("");
+  const [eventStartHour, setEventStartHour] = React.useState("");
+  const [eventEndHour, setEventEndHour] = React.useState("");
+  const [openModal, setOpenModal] = React.useState(false);
+  const modalBox = () => {
+    document.body.style.overflow = openModal ? "hidden" : "auto";
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+        <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+          <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
+          <div className="flex justify-center gap-3 mt-[50px]">
+            <button
+              className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+              onClick={() => {
+                setOpenModal(false);
+                document.body.style.overflow = "auto";
+              }}
+            >
+              No
+            </button>
+            <button
+              className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+              onClick={() => {
+                document.body.style.overflow = "auto";
+                navigate("/promotor");
+              }}
+            >
+              Yes
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  }
+    );
+  };
 
-  const printDataCategory = () =>{
-   return eventCategory.map((val,idx)=>{
-    return <li
-    key={idx}
-   className=" hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
-   onClick={() => {
-     setEventCategoryName(val.category);
-     setEventCategoryId(val.id);
-     console.log("category id",val.id);
-     console.log("category val",val.category);
-   }}
- >
-   {val.category}
- </li>
-   })
-  }
+  const printDataCategory = () => {
+    return eventCategory.map((val, idx) => {
+      return (
+        <li
+          key={idx}
+          className=" hover:bg-slate-300 w-full pl-2 py-1 rounded-sm"
+          onClick={() => {
+            setEventCategoryName(val.category);
+            setEventCategoryId(val.id);
+          }}
+        >
+          {val.category}
+        </li>
+      );
+    });
+  };
 
-  useEffect(()=>{
-    const getPromotorName = async ()=>{
-      const getToken = localStorage.getItem("token")
+  useEffect(() => {
+    const getPromotorName = async () => {
+      const getToken = localStorage.getItem("token");
       try {
         // const getName = await API_URL.get("/promotor/checkrole",{headers:{Authorization: `Bearer ${getToken}`}})
         // console.log("nasyj");
         // setPromotorName(getName.data.result.name)
-        
       } catch (error) {
         console.log("Error get data", error.message);
       }
-    }
-    const getCategory = async ()=>{
+    };
+    const getCategory = async () => {
       try {
-        const getCategory = await API_URL.get("/category")
+        const getCategory = await API_URL.get("/category");
         // const categoryName = getCategory.map((val,idx)=>{val.category})
-        setEventCategory(getCategory.data)
+        setEventCategory(getCategory.data);
       } catch (error) {
-        console.log("error get category",error);
+        console.log("error get category", error);
       }
-    }
-    getPromotorName()
-    getCategory()
-  },[])
+    };
+    getPromotorName();
+    getCategory();
+  }, []);
 
   console.log("ini adalah response", promotorName);
-  {ScrollToTop()}
+  {
+    ScrollToTop();
+  }
   return (
     <LayoutPromotor accountName={promotorName}>
       <div className="">
@@ -105,12 +118,10 @@ const CreateEvent = () => {
           <form action="">
             {/* EVENT TITLE */}
             <div>
-              <legend className=" text-4xl text font-bold mt-3">
-                Basic Info
-              </legend>
+              <legend className=" text-4xl text font-bold mt-3">Basic Info</legend>
               <p className="text-[0.8rem] mt-3">
-                Name Your Event and tell event-goers why they should come. Add
-                details that highlight what makes it unique
+                Name Your Event and tell event-goers why they should come. Add details that
+                highlight what makes it unique
               </p>
               <div className="flex flex-col pl-2 mt-3 w-full bg-gray-200 rounded-sm shadow-md ">
                 <p className="text-sm pt-1 text-slate-600">
@@ -184,7 +195,6 @@ const CreateEvent = () => {
                       }`}
                     >
                       {printDataCategory()}
-                      
                     </div>
                   </ul>
                   <span>
@@ -196,13 +206,10 @@ const CreateEvent = () => {
 
             {/* ADDRESS */}
             <div className="border-b-[1px] border-slate-300 pb-8">
-              <legend className=" text-4xl text font-bold mt-3 ">
-                Address
-              </legend>
+              <legend className=" text-4xl text font-bold mt-3 ">Address</legend>
               <p className="text-[0.8rem] mt-3">
-                Help people in the area discover your event and let attendees
-                know where to show up. If this is an online event, put your link
-                address
+                Help people in the area discover your event and let attendees know where to show up.
+                If this is an online event, put your link address
               </p>
               <div className="flex pl-2 mt-3 items-center text-sm bg-slate-200 gap-2 shadow-md rounded-sm focus:border-2 focus:border-blue-600">
                 <span>
@@ -212,7 +219,7 @@ const CreateEvent = () => {
                   type="url"
                   className="w-full py-3 bg-slate-200 focus:outline-none"
                   placeholder="Select event address or link address "
-                  onChange={(e)=>setEventAddress(e.target.value)}
+                  onChange={(e) => setEventAddress(e.target.value)}
                 />
               </div>
               <div className="flex pl-2 mt-3 items-center text-sm bg-slate-200 gap-2 shadow-md rounded-sm focus:border-2 focus:border-blue-600">
@@ -223,19 +230,16 @@ const CreateEvent = () => {
                   type="url"
                   className="w-full py-3 bg-slate-200 focus:outline-none"
                   placeholder="Select country your event took place"
-                  onChange={(e)=>setEventCity(e.target.value)}
+                  onChange={(e) => setEventCity(e.target.value)}
                 />
               </div>
             </div>
 
             {/* DATE AND TIME */}
             <div className="">
-              <legend className=" text-4xl text font-bold mt-3">
-                Date and Time
-              </legend>
+              <legend className=" text-4xl text font-bold mt-3">Date and Time</legend>
               <p className="text-[0.8rem] mt-3">
-                Tell event-goers when your event start and end so they can make
-                plans to attend.
+                Tell event-goers when your event start and end so they can make plans to attend.
               </p>
               <div className="flex gap-2 mt-3">
                 {/* Date Start - End */}
@@ -246,7 +250,7 @@ const CreateEvent = () => {
                       <input
                         type="date"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
-                        onChange={(e)=>setEventDateStart(e.target.value)}
+                        onChange={(e) => setEventDateStart(e.target.value)}
                       />
                     </label>
                   </div>
@@ -256,7 +260,7 @@ const CreateEvent = () => {
                       <input
                         type="date"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
-                        onChange={(e)=>setEventDateEnds(e.target.value)}
+                        onChange={(e) => setEventDateEnds(e.target.value)}
                       />
                     </label>
                   </div>
@@ -269,7 +273,7 @@ const CreateEvent = () => {
                       <input
                         type="time"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
-                        onChange={(e)=>setEventStartHour(e.target.value)}
+                        onChange={(e) => setEventStartHour(e.target.value)}
                       />
                     </label>
                   </div>
@@ -279,7 +283,7 @@ const CreateEvent = () => {
                       <input
                         type="time"
                         className="bg-slate-200 text-slate-800 focus:outline-none"
-                        onChange={(e)=>setEventEndHour(e.target.value)}
+                        onChange={(e) => setEventEndHour(e.target.value)}
                       />
                     </label>
                   </div>
@@ -295,7 +299,7 @@ const CreateEvent = () => {
         <button
           type="button"
           className=" rounded-sm font-bold text-black bg-white w-36 border-[1px] border-slate-500  hover:bg-slate-500 "
-          onClick={()=>setOpenModal(true)}
+          onClick={() => setOpenModal(true)}
         >
           Discard
         </button>
@@ -303,19 +307,27 @@ const CreateEvent = () => {
           type="button"
           className="p-3 w-36 rounded-sm font-bold text-white bg-black  hover:bg-slate-700"
           onClick={() => {
-            const result = {eventTitle,eventType,eventCategoryId,eventAddress,eventCity,eventDateStart,eventDateEnds,eventStartHour,eventEndHour}
+            const result = {
+              eventTitle,
+              eventType,
+              eventCategoryId,
+              eventAddress,
+              eventCity,
+              eventDateStart,
+              eventDateEnds,
+              eventStartHour,
+              eventEndHour,
+            };
 
-            const resultStringified = JSON.stringify(result)
-            sessionStorage.setItem("basic_info",resultStringified)
-            navigate("/promotor/create-event-details")
+            const resultStringified = JSON.stringify(result);
+            sessionStorage.setItem("basic_info", resultStringified);
+            navigate("/promotor/create-event-details");
           }}
         >
           Save & Continue
         </button>
       </div>
-      <div className={`${openModal ? "visible " : "invisible"}`}>
-          {modalBox()}
-      </div>
+      <div className={`${openModal ? "visible " : "invisible"}`}>{modalBox()}</div>
       <Footer />
     </LayoutPromotor>
   );

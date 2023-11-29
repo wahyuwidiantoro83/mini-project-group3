@@ -143,18 +143,6 @@ const CreateEventProfile = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Legal Document (PDF)
-              </label>
-              <input
-                type="file"
-                name="document"
-                accept=".pdf"
-                onChange={handleFileChange}
-                className="block w-full py-2 px-3 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring focus:border-blue-300"
-              />
-            </div>
-            <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">Bank Account</label>
               <input
                 type="text"

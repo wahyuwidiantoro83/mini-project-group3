@@ -132,7 +132,7 @@ const Navbar = (props) => {
               {" "}
               <div className="flex items-center gap-4 px-4 py-5 hover:bg-gray-100 cursor-pointer">
                 <div className="icon w-4 h-4">
-                  <HiMiniCalendarDays size={"100%"} />
+                  <HiMiniCalendarDays size={"100%"} onClick={navigate("/promotor/create-event")} />
                 </div>
                 <span>Create Events</span>
               </div>

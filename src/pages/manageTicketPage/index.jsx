@@ -116,9 +116,7 @@ const ManageTicket = () => {
                   : new Date(val.ticketSalesEnd).getMinutes()}
               </p>
             </div>
-            <div className="w-[60px]  px-1 whitespace-nowrap text">
-              0/{val.ticketStock}
-            </div>
+            <div className="w-[60px]  px-1 whitespace-nowrap text">0/{val.ticketStock}</div>
             <div className="w-[100px] px-1 whitespace-nowrap overflow-hidden text-ellipsis  group-hover:overflow-visible group-hover:whitespace-normal">
               Rp {parseInt(val.ticketPrice).toLocaleString("id")}
             </div>
@@ -135,12 +133,8 @@ const ManageTicket = () => {
                   let getTicketPrint = sessionStorage.getItem("ticket-info");
                   let getTicketPrintParsed = JSON.parse(getTicketPrint);
                   getTicketPrintParsed.splice(idx, 1);
-                  let getTicketPrintStringified =
-                    JSON.stringify(getTicketPrintParsed);
-                  sessionStorage.setItem(
-                    "ticket-info",
-                    getTicketPrintStringified
-                  );
+                  let getTicketPrintStringified = JSON.stringify(getTicketPrintParsed);
+                  sessionStorage.setItem("ticket-info", getTicketPrintStringified);
                   setDataTicket(getTicketPrintParsed);
                 }}
               >
@@ -195,12 +189,8 @@ const ManageTicket = () => {
                     let getTicketPrint = sessionStorage.getItem("ticket-info");
                     let getTicketPrintParsed = JSON.parse(getTicketPrint);
                     getTicketPrintParsed.splice(idx, 1);
-                    let getTicketPrintStringified =
-                      JSON.stringify(getTicketPrintParsed);
-                    sessionStorage.setItem(
-                      "ticket-info",
-                      getTicketPrintStringified
-                    );
+                    let getTicketPrintStringified = JSON.stringify(getTicketPrintParsed);
+                    sessionStorage.setItem("ticket-info", getTicketPrintStringified);
                     setDataTicket(getTicketPrintParsed);
                   }}
                 >
@@ -221,8 +211,7 @@ const ManageTicket = () => {
                   <span>
                     <FaCircle className="text-[9px] text-green-600" />
                   </span>
-                  On Sale | Ends{" "}
-                  {monthName[new Date(val.ticketSalesEnd).getMonth()]}{" "}
+                  On Sale | Ends {monthName[new Date(val.ticketSalesEnd).getMonth()]}{" "}
                   {new Date(val.ticketSalesEnd).getDate() < 10
                     ? `0${new Date(val.ticketSalesEnd).getDate()}`
                     : new Date(val.ticketSalesEnd).getDate()}
@@ -253,12 +242,8 @@ const ManageTicket = () => {
                     let getTicketPrint = sessionStorage.getItem("ticket-info");
                     let getTicketPrintParsed = JSON.parse(getTicketPrint);
                     getTicketPrintParsed.splice(idx, 1);
-                    let getTicketPrintStringified =
-                      JSON.stringify(getTicketPrintParsed);
-                    sessionStorage.setItem(
-                      "ticket-info",
-                      getTicketPrintStringified
-                    );
+                    let getTicketPrintStringified = JSON.stringify(getTicketPrintParsed);
+                    sessionStorage.setItem("ticket-info", getTicketPrintStringified);
                     setDataTicket(getTicketPrintParsed);
                   }}
                 >
@@ -275,25 +260,18 @@ const ManageTicket = () => {
   const printDiscountTo = () => {
     if (dataTicket) {
       return dataTicket.map((val, idx) => {
-        return (
-          <tr
-            key={idx}
-            className="group cursor-default group-hover:bg-slate-300 h-12"
-          >
-            <td className="group-hover:bg-slate-300">
-              <input
-                type="checkbox"
-                name="applyDiscountTo"
-                id=""
-                value={val.ticketName}
-              />
-            </td>
-            <td className="group-hover:bg-slate-300">{val.ticketName}</td>
-            <td className="group-hover:bg-slate-300">
-              Rp {val.ticketPrice.toLocaleString("id")}
-            </td>
-          </tr>
-        );
+        if (discountAmount < val.ticketPrice)
+          return (
+            <tr key={idx} className="group cursor-default group-hover:bg-slate-300 h-12">
+              <td className="group-hover:bg-slate-300">
+                <input type="checkbox" name="applyDiscountTo" id="" value={val.ticketName} />
+              </td>
+              <td className="group-hover:bg-slate-300">{val.ticketName}</td>
+              <td className="group-hover:bg-slate-300">
+                Rp {val.ticketPrice.toLocaleString("id")}
+              </td>
+            </tr>
+          );
       });
     }
   };
@@ -340,8 +318,8 @@ const ManageTicket = () => {
               Let's Create Ticket
             </h1>
             <p className=" text-justify mt-2">
-              Create a section if you want to sell multiple ticket types that
-              share the same inventory. i.e. Floor, Mezzanine.
+              Create a section if you want to sell multiple ticket types that share the same
+              inventory. i.e. Floor, Mezzanine.
             </p>
             <div className="flex mt-6">
               <button
@@ -362,18 +340,14 @@ const ManageTicket = () => {
       return (
         <div className={` md:mt-0  md:mx-auto`}>
           <div className="flex flex-col lg:w-[700px] md:w-[530px]">
-            <h1 className=" text-xl font-bold pt-2 pb-3 pl-2 ">
-              Manage Tickets
-            </h1>
+            <h1 className=" text-xl font-bold pt-2 pb-3 pl-2 ">Manage Tickets</h1>
 
             {/* Navbar ADMISSION & PROMO CODES */}
             <div className="flex justify-evenly border-b-[2px] border-slate-300 ">
               <button
                 type="button"
                 className={`pt-3 pb-2 font-bold w-full rounded-sm hover:bg-slate-200 ${
-                  admissionBlue
-                    ? "border-b-4 border-blue-400"
-                    : "border-b-4 border-transparent"
+                  admissionBlue ? "border-b-4 border-blue-400" : "border-b-4 border-transparent"
                 }`}
                 onClick={onHandleAdmissionTicketLanding}
               >
@@ -382,9 +356,7 @@ const ManageTicket = () => {
               <button
                 type="button"
                 className={`pt-3 pb-2 font-bold w-full rounded-sm hover:bg-slate-200 ${
-                  promoBlue
-                    ? "border-b-4 border-blue-400"
-                    : "border-b-4 border-transparent"
+                  promoBlue ? "border-b-4 border-blue-400" : "border-b-4 border-transparent"
                 }`}
                 onClick={onHandlePromoTicketLanding}
               >
@@ -414,9 +386,9 @@ const ManageTicket = () => {
     return (
       <>
         <div
-          className={`pl-1 mt-9 flex-col pr-1 ${
-            admissionPage ? "flex" : "hidden"
-          } md:${admissionPageMd ? "flex" : "hidden"}`}
+          className={`pl-1 mt-9 flex-col pr-1 ${admissionPage ? "flex" : "hidden"} md:${
+            admissionPageMd ? "flex" : "hidden"
+          }`}
         >
           <div className="flex justify-end w-full pr-10 ">
             <button
@@ -427,9 +399,7 @@ const ManageTicket = () => {
             </button>
           </div>
 
-          <ul className="mt-7 min-h-[350px] max-h-[480px] overflow-auto ">
-            {printDataTicket()}
-          </ul>
+          <ul className="mt-7 min-h-[350px] max-h-[480px] overflow-auto ">{printDataTicket()}</ul>
           <div className="flex justify-end my-5 mb-10 pr-2 ">
             <button
               className=" bg-black rounded-sm py-2 px-8  text-white hover:bg-slate-700 "
@@ -452,23 +422,17 @@ const ManageTicket = () => {
       console.log("apply nih", applyTo);
       return (
         <li key={idx} className="flex justify-between py-5 px-1">
-          <div className=" text-ellipsis overflow-hidden w-[120px]">
-            {val.promoName}
-          </div>
+          <div className=" text-ellipsis overflow-hidden w-[120px]">{val.promoName}</div>
           <div className="w-[77px] overflow-hidden text-ellipsis">
             Rp {parseInt(val.discountAmount).toLocaleString("id")}
           </div>
-          <div className="w-[70px] text-ellipsis overflow-hidden">
-            0/{val.promoLimit}
-          </div>
-          <div className=" text-ellipsis overflow-hidden w-[120px]">
-            {val.applyTo.join(", ")}
-          </div>
+          <div className="w-[70px] text-ellipsis overflow-hidden">0/{val.promoLimit}</div>
+          <div className=" text-ellipsis overflow-hidden w-[120px]">{val.applyTo.join(", ")}</div>
           <div className={`button${idx} relative w-[70px] flex text-lg gap-2`}>
             <button
               className="rounded-sm bg-white p-2 hover:bg-blue-300 shadow-md"
               onClick={() => {
-                setTicketOption(true)
+                setTicketOption(true);
               }}
             >
               <CiEdit />
@@ -479,8 +443,7 @@ const ManageTicket = () => {
                 let getPromoPrint = sessionStorage.getItem("promo-info");
                 let getPromoPrintParsed = JSON.parse(getPromoPrint);
                 getPromoPrintParsed.splice(idx, 1);
-                let getPromoPrintStringified =
-                  JSON.stringify(getPromoPrintParsed);
+                let getPromoPrintStringified = JSON.stringify(getPromoPrintParsed);
                 sessionStorage.setItem("promo-info", getPromoPrintStringified);
                 setDataPromo(getPromoPrintParsed);
 
@@ -515,12 +478,10 @@ const ManageTicket = () => {
             className={` mx-auto w-[270px] py-20 md:w-[360px] md:py-0 lg:ml-[160px] md:ml-[100px] md:mt-20 md:mb-20 `}
           >
             <CiDiscount1 className="text-[150px] rounded-full bg-slate-200 p-2 mx-auto" />
-            <h1 className="text-center font-bold text-xl mt-6">
-              Create a promo code
-            </h1>
+            <h1 className="text-center font-bold text-xl mt-6">Create a promo code</h1>
             <p className=" text-justify mt-2">
-              Use codes to offer exclusive discounts, deals, and access to your
-              event. You can add them individually.
+              Use codes to offer exclusive discounts, deals, and access to your event. You can add
+              them individually.
             </p>
             <div className="flex mt-6">
               <button
@@ -540,9 +501,9 @@ const ManageTicket = () => {
     } else {
       return (
         <div
-          className={` mt-9 flex-col px-2 ${
-            promCodePage ? "flex" : "hidden"
-          } md:${promCodePageMd ? "block" : "hidden"}`}
+          className={` mt-9 flex-col px-2 ${promCodePage ? "flex" : "hidden"} md:${
+            promCodePageMd ? "block" : "hidden"
+          }`}
         >
           <div className="flex justify-end w-full pr-10 ">
             <button
@@ -558,14 +519,10 @@ const ManageTicket = () => {
 
           <ul className="mt-7 min-h-[350px] max-h-[480px] overflow-auto md:min-h-[410px] md:overflow-hidden">
             <li className="flex justify-between bg-slate-200 py-5 px-1">
-              <div className=" text-ellipsis overflow-hidden w-[120px]">
-                Name
-              </div>
+              <div className=" text-ellipsis overflow-hidden w-[120px]">Name</div>
               <div className="w-[77px]">Discount</div>
               <div className="w-[70px]">Uses</div>
-              <div className=" text-ellipsis overflow-hidden w-[120px]">
-                Applies to
-              </div>
+              <div className=" text-ellipsis overflow-hidden w-[120px]">Applies to</div>
               <div className="w-[70px]">Action</div>
             </li>
             {printDataPromo()}
@@ -671,9 +628,7 @@ const ManageTicket = () => {
           <div className="flex gap-5 pl-5 pr-10 justify-center">
             <button
               className={`text-lg border-[2px] rounded-md px-14 ${
-                buttonPaid
-                  ? "border-blue-500 bg-slate-300"
-                  : "border-slate-500 "
+                buttonPaid ? "border-blue-500 bg-slate-300" : "border-slate-500 "
               } py-3 hover:border-blue-400 hover:bg-slate-300 font-bold`}
               onClick={() => {
                 setButtonPaid(true);
@@ -685,9 +640,7 @@ const ManageTicket = () => {
             </button>
             <button
               className={`text-lg border-[2px] rounded-md px-14 ${
-                buttonFree
-                  ? "border-blue-500 bg-slate-300"
-                  : "border-slate-500 "
+                buttonFree ? "border-blue-500 bg-slate-300" : "border-slate-500 "
               } py-3 hover:border-blue-400 hover:bg-slate-300 font-bold`}
               onClick={() => {
                 setButtonFree(true);
@@ -714,12 +667,9 @@ const ManageTicket = () => {
                   setTicketName(e.target.value);
                 }}
                 value={ticketName}
-                
               />
             </div>
-            <div className="w-full mx-auto text-xs text-right mt-1">
-              {countMax}/50
-            </div>
+            <div className="w-full mx-auto text-xs text-right mt-1">{countMax}/50</div>
           </div>
 
           {/* Ticket Stock */}
@@ -876,9 +826,7 @@ const ManageTicket = () => {
                 value={promoName}
               />
             </div>
-            <div className="w-full mx-auto text-xs text-right mt-1">
-              {countMax2}/50
-            </div>
+            <div className="w-full mx-auto text-xs text-right mt-1">{countMax2}/50</div>
           </div>
 
           {/* Promo Limit */}
@@ -902,7 +850,7 @@ const ManageTicket = () => {
 
           {/* Discount amount */}
           <div className="flex flex-col mt-5 gap-y-2">
-            <p>Input your discount amount by nominal or percentage</p>
+            <p>Input your discount amount by nominal</p>
             <div className="flex justify-between">
               <div className="pl-2 shadow-md flex items-center gap-3 h-[50px] w-[170px] bg-slate-100 ">
                 <span className=" font-bold text-sm">Rp</span>
@@ -930,9 +878,17 @@ const ManageTicket = () => {
                 value={applyTo}
                 onChange={() => {
                   let allTicket = [];
-                  allTicket = dataTicket.map((val, idx) => {
-                    return val.ticketName;
-                  });
+                  // allTicket = dataTicket.map((val, idx) => {
+                  //   if (parseInt(discountAmount) < parseInt(val.ticketPrice)) {
+                  //     return val.ticketName;
+                  //   } else {
+                  //   }
+                  // });
+                  for (let i = 0; i < dataTicket.length; i++) {
+                    if (parseInt(discountAmount) < parseInt(dataTicket[i].ticketPrice)) {
+                      allTicket.push(dataTicket[i].ticketName);
+                    }
+                  }
                   setApplyTo(allTicket);
                 }}
               />{" "}
@@ -941,13 +897,8 @@ const ManageTicket = () => {
             </div>
             <div className="flex gap-1 justify-between">
               <div>
-                <input
-                  type="radio"
-                  name="applyDiscount"
-                  id=""
-                  value={applyTo}
-                />{" "}
-                Only certain visible ticket
+                <input type="radio" name="applyDiscount" id="" value={applyTo} /> Only certain
+                visible ticket
               </div>
               <span
                 className=" text-slate-600 cursor-pointer hover:text-blue-600"
@@ -971,9 +922,7 @@ const ManageTicket = () => {
                 setPromoLimit("");
                 setDiscountAmount("");
                 setApplyTo(
-                  (document.querySelector(
-                    'input[name="applyDiscount"]:checked'
-                  ).checked = false)
+                  (document.querySelector('input[name="applyDiscount"]:checked').checked = false)
                 );
               }}
             >
@@ -993,7 +942,8 @@ const ManageTicket = () => {
                     promoLimit,
                     discountAmount,
                     applyTo,
-                    applyToBackend:applyTo.length>1?[...applyTo].join(","):[...applyTo].join(""),
+                    applyToBackend:
+                      applyTo.length > 1 ? [...applyTo].join(",") : [...applyTo].join(""),
                   },
                 ];
 
@@ -1007,9 +957,7 @@ const ManageTicket = () => {
                   setPromoLimit("");
                   setDiscountAmount("");
                   setApplyTo(
-                    (document.querySelector(
-                      'input[name="applyDiscount"]:checked'
-                    ).checked = false)
+                    (document.querySelector('input[name="applyDiscount"]:checked').checked = false)
                   );
                 } else {
                   let getPromo = sessionStorage.getItem("promo-info");
@@ -1023,9 +971,7 @@ const ManageTicket = () => {
                   setPromoLimit("");
                   setDiscountAmount("");
                   setApplyTo(
-                    (document.querySelector(
-                      'input[name="applyDiscount"]:checked'
-                    ).checked = false)
+                    (document.querySelector('input[name="applyDiscount"]:checked').checked = false)
                   );
                 }
               }}
@@ -1079,28 +1025,39 @@ const ManageTicket = () => {
     );
   };
 
-  const [openModal, setOpenModal]=React.useState(false)
-  const modalBox = ()=>{
-    document.body.style.overflow=openModal?"hidden":"auto"
-    return <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
-      <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
-        <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
-        <div className="flex justify-center gap-3 mt-[50px]">
-        <button className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
-        onClick={()=>{setOpenModal(false)
-        document.body.style.overflow="auto"}}>No</button>
-        <button className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
-        onClick={()=>{
-          sessionStorage.removeItem("basic_info")
-          sessionStorage.removeItem("details")
-          document.body.style.overflow="auto"
-          navigate("/promotor")
-        }}>Yes</button>
+  const [openModal, setOpenModal] = React.useState(false);
+  const modalBox = () => {
+    document.body.style.overflow = openModal ? "hidden" : "auto";
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center">
+        <div className="bg-white w-[350px] rounded-sm py-8 px-4 shadow-lg">
+          <p className=" text-center font-semibold">Are you sure want to delete this event?</p>
+          <div className="flex justify-center gap-3 mt-[50px]">
+            <button
+              className="rounded-sm font-bold text-black bg-white w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+              onClick={() => {
+                setOpenModal(false);
+                document.body.style.overflow = "auto";
+              }}
+            >
+              No
+            </button>
+            <button
+              className="rounded-sm  text-white bg-black w-[100px] border-[1px] border-slate-500  hover:bg-slate-500 "
+              onClick={() => {
+                sessionStorage.removeItem("basic_info");
+                sessionStorage.removeItem("details");
+                document.body.style.overflow = "auto";
+                navigate("/promotor");
+              }}
+            >
+              Yes
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  }
-
+    );
+  };
 
   React.useEffect(() => {});
   {
@@ -1128,9 +1085,7 @@ const ManageTicket = () => {
         {/* PAGE untuk PROMO CODES jika tidak ada kode promo */}
 
         <div
-          className={` flex justify-center  ${
-            ticketOption ? "relative" : "hidden"
-          } md:${
+          className={` flex justify-center  ${ticketOption ? "relative" : "hidden"} md:${
             ticketOption ? "absolute" : "hidden"
           } md:-right-[0px] md:top-[63px]`}
         >
@@ -1145,12 +1100,8 @@ const ManageTicket = () => {
           {addPromotionBox()}
         </div>
       </div>
-      <div className={`${toggleModal ? "visible " : "invisible"}`}>
-        {modalApplyDiscount()}
-      </div>
-      <div className={`${openModal ? "visible " : "invisible"}`}>
-          {modalBox()}
-      </div>
+      <div className={`${toggleModal ? "visible " : "invisible"}`}>{modalApplyDiscount()}</div>
+      <div className={`${openModal ? "visible " : "invisible"}`}>{modalBox()}</div>
       <Footer />
     </LayoutPromotor>
   );
